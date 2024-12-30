@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "537901858494",
+    "project_id": "adventrail-207ba",
+    "storage_bucket": "adventrail-207ba.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537901858494:android:b7a34144deef50403a28ef",
+        "android_client_info": {
+          "package_name": "com.advertrail.adver_trail"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDfP4Y0g_NPKlmi1lltvayhX12GLmglto"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
