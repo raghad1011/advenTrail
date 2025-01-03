@@ -1,3 +1,4 @@
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'onboardingscreen1.dart';
 
@@ -5,16 +6,17 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  SplashScreenState createState() => SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // After 3 seconds, navigate to OnboardingScreen1
+    handleDynamicLink();
+    // After 5 seconds, navigate to OnboardingScreen1
   
-  Future.delayed(const Duration(seconds: 3), () {
+  Future.delayed(const Duration(seconds: 5), () {
   if (mounted) {
     Navigator.pushReplacement(
       context,
@@ -23,7 +25,21 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 });
   }
+  Future<void> handleDynamicLink() async {
+    final PendingDynamicLinkData? data =
+    await FirebaseDynamicLinks.instance.getInitialLink();
 
+    if (data?.link != null) {
+      final Uri deepLink = data!.link;
+      print('Received deep link: ${deepLink.toString()}');
+
+      // تحقق من الرابط الديناميكي
+      if (deepLink.path == '/forgot_password') {
+        // توجيه المستخدم إلى صفحة تغيير كلمة المرور
+        Navigator.pushReplacementNamed(context, '/forgot_password');
+      }
+    }
+  }
 
   
   @override

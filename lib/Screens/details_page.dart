@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:adver_trail/Screens/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -351,7 +352,7 @@ class TripDetailsPageState extends State<TripDetailsPage> {
             ),
           ),
           onPressed: () {
-            print("Book Now Pressed");
+
           },
           child: const Text(
             "Book Now",

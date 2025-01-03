@@ -127,7 +127,7 @@ class ForYouScrollState extends State<ForYouScroll> {
                               child: Icon(
                                 Icons.bookmark,
                                 size: 18,
-                                color: isSaved ? Colors.black : Colors.white,
+                                color: isSaved ? Colors.yellow : Colors.white,
                               ),
                             ),
                           ),

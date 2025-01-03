@@ -18,6 +18,25 @@ class FilterPageState extends State<FilterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
+        appBar: AppBar(
+        backgroundColor: Colors.grey[200],
+        elevation: 0,
+        leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: Colors.black, size: 32),
+    onPressed: () {
+    Navigator.pushNamed(context, '/bottomNav');
+    },
+    ),
+          title: const Text(
+            'Filter',
+            style: TextStyle(
+              color: Color(0xff361C0B),
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          centerTitle: true,
+        ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

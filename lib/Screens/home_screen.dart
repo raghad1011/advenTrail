@@ -137,16 +137,11 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             IconButton(
-              icon: const Icon(
-                Icons.menu,
-                color: Colors.black,
-                size: 32,
-              ),
+              icon: const Icon(Icons.notifications, color: Colors.black,size: 32,),
               onPressed: () {
-                Navigator.pushNamed(context, '/setting');
+                Navigator.pushNamed(context, '/notification');
               },
-            ),
-          ],
+            ),          ],
         ),
       ),
       body: Column(
@@ -154,7 +149,31 @@ class HomePage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 8, top: 5),
-            child: Image.asset('assets/images/Frame 40.png'),
+            child: Stack(
+              alignment: Alignment.center, // لمحاذاة الصورة الثانية في المنتصف
+              children: [
+                Image.asset(
+                  'assets/images/Frame 40.png', // الصورة الأساسية
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+                Positioned(
+                  top: 50, // تعديل موضع الصورة الثانية
+                  right: 40, // تعديل موضع الصورة الثانية
+                  child: GestureDetector(
+                    onTap: () {
+                      // الانتقال إلى الصفحة الثانية عند الضغط على الصورة
+                      Navigator.pushNamed(context, '/point');
+                    },
+                    child: Image.asset(
+                      'assets/images/gift.png', // الصورة الجديدة (فوق الأساسية)
+                      width: 30,
+                      height: 50,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           const Padding(
             padding: EdgeInsets.only(left: 8),
