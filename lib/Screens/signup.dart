@@ -36,12 +36,12 @@ class SignUpScreenState extends State<SignUpScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Positioned(
-                  top: 80,
-                  left: 150,
-                  child: Image.asset(
+                // Positioned(
+                //   top: 80,
+                //   left: 150,
+                  Image.asset(
                       'assets/images/Group 4.png', width: 90, height: 90),
-                ),
+
                 const SizedBox(height: 20),
                 // Title
                 const Text(
@@ -165,39 +165,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                   child: ElevatedButton(
                     onPressed: () async {
                       await signUp(context);
-                      // لعرض النافذة
-                      showDialog(
-                        barrierColor: Colors.transparent,
-                        barrierDismissible: false,
-                        context: Get.context!,
-                        builder: (context) {
-                          return Container(
-                            alignment: Alignment.center,
-                            margin: const EdgeInsets.symmetric(vertical: 300, horizontal: 100),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Loading...",
-                                  style: TextStyle(fontSize: 15, color: Colors.black),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                CircularProgressIndicator(),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                      // لإخفاء النافذة
-                      Future.delayed(Duration(seconds: 5), () {
-                        Navigator.pop(Get.context!);
-                      });
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.brown[800],
@@ -265,7 +232,44 @@ class SignUpScreenState extends State<SignUpScreen> {
          );
         collectionReference.doc(credential.user!.uid).set(General.user!.toJson());
          log(credential.user!.uid);
-        Navigator.pushNamed(context, '/bottomNav');
+        showDialog(
+          barrierColor: Colors.transparent,
+          barrierDismissible: false,
+          context: context,
+          builder: (context) {
+            return Material(
+              color: Colors.white.withAlpha(0),
+              child: Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.symmetric(vertical: MediaQuery
+                    .sizeOf(context)
+                    .height * (4 / 10), horizontal: 60),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Loading...",
+                      style: TextStyle(fontSize: 15, color: Colors.black),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    CircularProgressIndicator(),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+        Future.delayed(Duration(seconds: 3),() {
+          Navigator.pop(context);
+          Navigator.pushNamed(context, '/bottomNav');
+        },);
+
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           print('The password provided is too weak.');

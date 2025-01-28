@@ -79,7 +79,7 @@ class PointsGiftsPage extends StatelessWidget {
                 crossAxisCount: 2,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: 1.1,
+                childAspectRatio: 0.9,
                 children: [
                   _buildPointCard('assets/images/image 6.png',
                       'Volunteer Points', '10 points'),
@@ -93,20 +93,20 @@ class PointsGiftsPage extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 50,),
+          //const SizedBox(height: 0.9,),
           const Divider(thickness: 1, color: Colors.black26),
 
           // Current Points Section
           const Padding(
             padding:
-            EdgeInsets.symmetric(horizontal: 16.0,vertical: 50),
+            EdgeInsets.symmetric(horizontal: 16.0,vertical: 25),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'You still do not have a point',
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Color(0xff361C0B),
                   ),

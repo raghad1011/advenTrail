@@ -47,10 +47,12 @@ class NewpasswordScreen extends StatelessWidget {
               ),
               const SizedBox(height: 30),
               const Text(
-                'Enter your email to receive a reset link',
-                style: TextStyle(fontSize: 18),
+                'Enter your email to receive a reset link :',
+                style: TextStyle(fontSize: 16),
               ),
-               CustomTextField(
+              const SizedBox(height: 10),
+
+              CustomTextField(
                 icon: Icons.email,
                 hintText: 'Email',
                 controller: emailController,

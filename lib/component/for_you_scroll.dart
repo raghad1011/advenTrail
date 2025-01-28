@@ -32,7 +32,8 @@ class ForYouScrollState extends State<ForYouScroll> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: GridView.builder(
         physics: const BouncingScrollPhysics(),
-        shrinkWrap: true, // يسمح للـ GridView بأخذ حجمه من محتوياته
+        shrinkWrap: true,
+        // يسمح للـ GridView بأخذ حجمه من محتوياته
         itemCount: widget.trips.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -53,17 +54,18 @@ class ForYouScrollState extends State<ForYouScroll> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => TripDetailsPage(
-                    images: trip['images'] ?? 'assets/images/default.jpg',
+                      images: trip['images'] ?? 'assets/images/default.jpg',
                       title: trip['title'] ?? 'No Title',
-                    price: trip['price'] ?? '',
-                    level: trip['level'] ?? '',
-                      distance :trip['distance'] ?? '0 km',
-                      accessibility:trip['accessibility'] ?? '',
-                    details: trip['details'] ?? 'No Details',
-                    city: trip['city'] ?? 'unknown',
-                    latitude: trip['latitude'],
-                    longitude: trip['longitude']
-                  ),
+                      price: trip['price'] ?? '',
+                      level: trip['level'] ?? '',
+                      category: trip['category'] ?? '',
+                      distance: trip['distance'] ?? '0 km',
+                      accessibility: trip['accessibility'] ?? '',
+                      details: trip['details'] ?? 'No Details',
+                      selectedDay: trip['selectedDay'] ?? '',
+                      city: trip['city'] ?? 'unknown',
+                      latitude: trip['latitude'],
+                      longitude: trip['longitude']),
                 ),
               );
             },
@@ -79,23 +81,24 @@ class ForYouScrollState extends State<ForYouScroll> {
                   ),
                 ],
               ),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
-            child: Image.asset(
-              imageUrl,
-              height: 120,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return const Center(
-                  child: Text("Image not found"),
-                );
-              },
-            ),
-          ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(10)),
+                    child: Image.asset(
+                      imageUrl,
+                      height: 120,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Center(
+                          child: Text("Image not found"),
+                        );
+                      },
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -103,7 +106,8 @@ class ForYouScrollState extends State<ForYouScroll> {
                       children: [
                         Text(
                           trip['title'] ?? 'No Title',
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -111,27 +115,30 @@ class ForYouScrollState extends State<ForYouScroll> {
                         if (trip['price'] != null)
                           Text(
                             trip['price']!,
-                            style: const TextStyle(fontSize: 14, color: Colors.grey),
+                            style: const TextStyle(
+                                fontSize: 14, color: Colors.grey),
                           ),
-                        const SizedBox(height: 8),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: GestureDetector(
-                            onTap: () => toggleSaveTrip(index),
-                            child: Container(
-                              padding: const EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: isSaved ? Colors.brown[100] : Colors.brown[100],
-                              ),
-                              child: Icon(
-                                Icons.bookmark,
-                                size: 18,
-                                color: isSaved ? Colors.yellow : Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
+                        //const SizedBox(height: 8),
+                        // Align(
+                        //   alignment: Alignment.centerRight,
+                        //   child: GestureDetector(
+                        //     onTap: () => toggleSaveTrip(index),
+                        //     child: Container(
+                        //       padding: const EdgeInsets.all(6),
+                        //       decoration: BoxDecoration(
+                        //         shape: BoxShape.circle,
+                        //         color: isSaved
+                        //             ? Colors.brown[100]
+                        //             : Colors.brown[100],
+                        //       ),
+                        //       child: Icon(
+                        //         Icons.bookmark,
+                        //         size: 18,
+                        //         color: isSaved ? Colors.yellow : Colors.white,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

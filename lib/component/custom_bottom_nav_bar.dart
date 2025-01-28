@@ -1,7 +1,6 @@
 import 'package:adver_trail/Screens/home_screen.dart';
 import 'package:adver_trail/bottomBar/location_screen.dart';
 import 'package:adver_trail/bottomBar/profile_screen.dart';
-import 'package:adver_trail/bottomBar/save_screen.dart';
 import 'package:flutter/material.dart';
 
 
@@ -19,7 +18,6 @@ class CustomBottomNavBarState extends State<CustomBottomNavBar> {
   // قائمة الصفحات
   final List<Widget> _pages = [
     const HomePage(), // محتوى الهوم فقط (بدون Scaffold)
-    const SavePage(),
     const LocationPage(),
     const ProfilePage(),
   ];
@@ -44,7 +42,6 @@ class CustomBottomNavBarState extends State<CustomBottomNavBar> {
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home,size: 32,), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.bookmark,size: 32), label: 'Save'),
           BottomNavigationBarItem(icon: Icon(Icons.location_on,size: 32), label: 'Location'),
           BottomNavigationBarItem(icon: Icon(Icons.person,size: 32), label: 'Profile'),
         ],

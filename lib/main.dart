@@ -6,8 +6,6 @@ import 'package:adver_trail/Screens/home_screen.dart';
 import 'package:adver_trail/Screens/login.dart';
 import 'package:adver_trail/Screens/forgot_password.dart';
 import 'package:adver_trail/Screens/notification.dart';
-import 'package:adver_trail/Screens/onboardingscreen2.dart';
-import 'package:adver_trail/Screens/onboardingscreen3.dart';
 import 'package:adver_trail/Screens/splash_screen.dart';
 import 'package:adver_trail/Screens/signup.dart';
 import 'package:adver_trail/Screens/verify.dart';
@@ -39,12 +37,10 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: _onGenerateRoute, // لمعالجة الروابط المرسلة عبر البريد
       routes: {
         '/': (context) => const SplashScreen(),
-        '/screen2': (context) => const OnboardingScreen2(),
-        '/screen3': (context) => const OnboardingScreen3(),
         '/home': (context) => const HomePage(),
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignUpScreen(),
-        '/verify': (context) => const VerifyScreen(),
+       // '/verify': (context) => const VerifyScreen(),
         '/volunteering': (context) => const VolunteeringPage(),
         '/bottomNav': (context) => const CustomBottomNavBar(),
         '/cycling': (context) => const CyclingPage(),
@@ -56,6 +52,7 @@ class MyApp extends StatelessWidget {
         '/notification': (context) => NotificationPage(),
         '/filter': (context) => FilterPage(),
         '/point': (context)=> PointsGiftsPage(),
+
       },
     );
   }
