@@ -40,7 +40,7 @@ class SplashScreenState extends State<SplashScreen> {
 
                   Positioned(
                     top: 90,
-                    left: 118,
+                    left: 120,
                     child: Image.asset('assets/images/Group 4.png', width: 130, height: 130),
                   ),
                   const Positioned(
