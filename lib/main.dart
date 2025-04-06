@@ -9,6 +9,7 @@ import 'package:adver_trail/Screens/notification.dart';
 import 'package:adver_trail/Screens/splash_screen.dart';
 import 'package:adver_trail/Screens/signup.dart';
 import 'package:adver_trail/Screens/verify.dart';
+import 'package:adver_trail/admin/admin_home.dart';
 import 'package:adver_trail/afterhomsecreen2/edit_profile.dart';
 import 'package:adver_trail/afterhomsecreen2/filter.dart';
 import 'package:adver_trail/afterhomsecreen2/points.dart';
@@ -22,7 +23,7 @@ import 'CategoryHomeScreeen.dart/mountain_trails-page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); // تهيئة Firebase
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -33,11 +34,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: "/", // الصفحة الرئيسية عند بدء التطبيق
-      onGenerateRoute: _onGenerateRoute, // لمعالجة الروابط المرسلة عبر البريد
+      initialRoute: "/",
+      onGenerateRoute: _onGenerateRoute,
       routes: {
         '/': (context) => const SplashScreen(),
         '/home': (context) => const HomePage(),
+        '/adminHome': (context) => const AdminHomeScreen(),
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignUpScreen(),
        // '/verify': (context) => const VerifyScreen(),

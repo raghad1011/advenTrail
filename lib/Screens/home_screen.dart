@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
         'distance': '8 km',
         'accessibility': 'child-Friendly',
         'details':
-            "Located in northern Jordan, King Talal Dam is a magnificent site surrounded by lush green landscapes.\n   The area features a blend of natural beauty and historical significance, offering an escape into serene views.\n   The trail around the dam offers a mix of open paths and shaded areas, ideal for walking and exploring. Visitors can enjoy the tranquil environment, with scenic spots perfect for rest and photography.\n   This trail is a testament to Jordan's rich natural heritage and is a must-visit for adventure enthusiasts.",
+        "Located in northern Jordan, King Talal Dam is a magnificent site surrounded by lush green landscapes.\n   The area features a blend of natural beauty and historical significance, offering an escape into serene views.\n   The trail around the dam offers a mix of open paths and shaded areas, ideal for walking and exploring. Visitors can enjoy the tranquil environment, with scenic spots perfect for rest and photography.\n   This trail is a testament to Jordan's rich natural heritage and is a must-visit for adventure enthusiasts.",
         'selectedDay': 'Sun',
         'city': 'Jerash ',
         'latitude': 32.1904,
@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
         'distance': '10 km',
         'accessibility': 'child-Friendly',
         'details':
-            "Situated in southern Jordan, Wadi Al-Hasa is a breathtaking canyon known for its lush vegetation, natural water springs, and stunning rock formations.\n   The trail offers a mix of shaded walks, water crossings, and open landscapes, making it perfect for hikers and adventurers.\n   Along the way, you'll encounter natural pools and a variety of flora and fauna unique to the region. Wadi Al-Hasa is a jewel of Jordan’s adventure tourism, promising an unforgettable experience.",
+        "Situated in southern Jordan, Wadi Al-Hasa is a breathtaking canyon known for its lush vegetation, natural water springs, and stunning rock formations.\n   The trail offers a mix of shaded walks, water crossings, and open landscapes, making it perfect for hikers and adventurers.\n   Along the way, you'll encounter natural pools and a variety of flora and fauna unique to the region. Wadi Al-Hasa is a jewel of Jordan’s adventure tourism, promising an unforgettable experience.",
         'selectedDay': 'Mon',
         'city': 'Tafilah ',
         'latitude': 30.8372,
@@ -63,7 +63,7 @@ class HomePage extends StatelessWidget {
         'distance': '10 km',
         'accessibility': 'child-Friendly',
         'details':
-            '     located in northern Jordan. It is one of the dense forests full of oak, sycamore, oak, hawthorn and sycamore trees.\n\nThe trail features shaded walks throughout the trail, and the trail ends with a view called Iraq Al-Tabl, and Iraq means hills.\n\nThe walk is one-way and will take you to the rest area and the bus.The trail is very special, and it is one of the most important landmarks of adventure tourism in Jordan.',
+        '     located in northern Jordan. It is one of the dense forests full of oak, sycamore, oak, hawthorn and sycamore trees.\n\nThe trail features shaded walks throughout the trail, and the trail ends with a view called Iraq Al-Tabl, and Iraq means hills.\n\nThe walk is one-way and will take you to the rest area and the bus.The trail is very special, and it is one of the most important landmarks of adventure tourism in Jordan.',
         'selectedDay': 'Fri',
         'city': 'Ajloun ',
         'latitude': 32.2833,
@@ -81,7 +81,7 @@ class HomePage extends StatelessWidget {
         'price': '35 JD',
         'level': 'hard',
         'details':
-            'Located in central Jordan, Wadi Talal is a hidden gem that captivates visitors with its rugged beauty and serene atmosphere.\n   The trail is characterized by its winding paths, surrounded by cliffs and diverse vegetation. The area is ideal for those seeking an adventurous hike combined with the tranquility of nature.\n   The trail leads to stunning viewpoints, providing a perfect spot to relax and appreciate the majestic scenery. Wadi Talal is a prime destination for nature lovers and adventure seekers alike.',
+        'Located in central Jordan, Wadi Talal is a hidden gem that captivates visitors with its rugged beauty and serene atmosphere.\n   The trail is characterized by its winding paths, surrounded by cliffs and diverse vegetation. The area is ideal for those seeking an adventurous hike combined with the tranquility of nature.\n   The trail leads to stunning viewpoints, providing a perfect spot to relax and appreciate the majestic scenery. Wadi Talal is a prime destination for nature lovers and adventure seekers alike.',
         'city': 'Aqaba',
         'latitude': 29.5766,
         'longitude': 35.4195
@@ -159,7 +159,11 @@ class HomePage extends StatelessWidget {
         'longitude': 35.5500
       },
       {
-        'images': ['assets/images/cycling (1).PNG', 'assets/images/cycling (2).PNG','assets/images/cycling (3).PNG'],
+        'images': [
+          'assets/images/cycling (1).PNG',
+          'assets/images/cycling (2).PNG',
+          'assets/images/cycling (3).PNG'
+        ],
         'title': 'Cycling',
         'price': '15 JD',
         'level': 'Easy',

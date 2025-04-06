@@ -64,8 +64,8 @@ class OnboardingPageView extends StatefulWidget {
 
 class OnboardingPageViewState extends State<OnboardingPageView> {
   final PageController _pageController = PageController();
-  int _currentPage = 0;
 
+  int _currentPage = 0;
   void _goToNextPage() {
     if (_currentPage < 2) {
       _pageController.nextPage(

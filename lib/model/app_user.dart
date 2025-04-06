@@ -1,18 +1,26 @@
-class AppUser {
-  String? userName;
-  String? emal;
 
-  AppUser({this.userName, this.emal});
+class AppUser {
+  // String? id;
+  String? userName;
+  String? email; // email
+
+  AppUser({
+    // this.id,
+    this.userName,
+    this.email,
+  });
 
   AppUser.fromJson(Map<String, dynamic> json) {
+    // id = json['id'];
     userName = json['userName'];
-    emal = json['emal'];
+    email = json['email'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['userName'] = this.userName;
-    data['emal'] = this.emal;
+    // data['id']=id;
+    data['userName'] = userName;
+    data['email'] = email;
     return data;
   }
 }

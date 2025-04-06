@@ -1,10 +1,6 @@
-import 'dart:developer';
-import 'package:adver_trail/model/app_user.dart';
-import 'package:adver_trail/utils/general.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import '../component/custom_text_field.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -13,13 +9,14 @@ class SignUpScreen extends StatefulWidget {
   @override
   SignUpScreenState createState() => SignUpScreenState();
 }
-class SignUpScreenState extends State<SignUpScreen> {
 
+class SignUpScreenState extends State<SignUpScreen> {
   bool isChecked = false; // Variable to track the checkbox state
-  TextEditingController email = TextEditingController();
-  TextEditingController username = TextEditingController();
-  TextEditingController password = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   TextEditingController conPassword = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
   String? errorMessage;
   GlobalKey<FormState> signupKey = GlobalKey<FormState>();
 
@@ -29,7 +26,6 @@ class SignUpScreenState extends State<SignUpScreen> {
       key: signupKey,
       child: Scaffold(
         backgroundColor: Colors.grey[100],
-
         body: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -39,8 +35,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                 // Positioned(
                 //   top: 80,
                 //   left: 150,
-                  Image.asset(
-                      'assets/images/Group 4.png', width: 90, height: 90),
+                Image.asset('assets/images/Group 4.png', width: 90, height: 90),
 
                 const SizedBox(height: 20),
                 // Title
@@ -63,12 +58,12 @@ class SignUpScreenState extends State<SignUpScreen> {
                       style: const TextStyle(color: Colors.red, fontSize: 14),
                     ),
                   ),
-                 CustomTextField(
+                CustomTextField(
                   icon: Icons.person,
                   hintText: 'Username',
-                  controller: username,
+                  controller: usernameController,
                   validator: (p0) {
-                    if(p0!.isEmpty){
+                    if (p0!.isEmpty) {
                       return "this field required";
                     }
                     return null;
@@ -79,9 +74,36 @@ class SignUpScreenState extends State<SignUpScreen> {
                 CustomTextField(
                   icon: Icons.email,
                   hintText: 'Email',
-                  controller: email,
+                  controller: emailController,
                   validator: (p0) {
-                    if(p0!.isEmpty){
+                    if (p0!.isEmpty) {
+                      return "this field required";
+                    }
+                    return null;
+                  },
+                ),
+                // const SizedBox(height: 15),
+                // TextFormField(
+                //   controller: phoneController,
+                //   decoration: InputDecoration(
+                //     prefixIcon: Icon(Icons.phone),
+                //     labelText: 'Phone Number',
+                //     border: OutlineInputBorder(),
+                //   ),
+                //   validator: (p0) {
+                //     if (p0!.isEmpty) {
+                //       return "this field required";
+                //     }
+                //     return null;
+                //   },
+                // ),
+                const SizedBox(height: 15),
+                CustomTextField(
+                  icon: Icons.phone,
+                  hintText: 'Phone Number',
+                  controller: phoneController,
+                  validator: (p0) {
+                    if (p0!.isEmpty) {
                       return "this field required";
                     }
                     return null;
@@ -94,12 +116,11 @@ class SignUpScreenState extends State<SignUpScreen> {
                   hintText: 'Password',
                   obscureText: true,
                   //suffixIcon: Icons.visibility,
-                  controller: password,
+                  controller: passwordController,
                   validator: (p0) {
-                    if(p0!.isEmpty){
+                    if (p0!.isEmpty) {
                       return "this field required";
-                    }
-                    else if(p0.length<8){
+                    } else if (p0.length < 8) {
                       return "the password is less than 8";
                     }
                     return null;
@@ -114,48 +135,13 @@ class SignUpScreenState extends State<SignUpScreen> {
                   //suffixIcon: Icons.visibility,
                   controller: conPassword,
                   validator: (p0) {
-                    if(p0!.isEmpty){
+                    if (p0!.isEmpty) {
                       return "this field required";
-                    }
-                    else if(password.text!=conPassword.text){
+                    } else if (passwordController.text != conPassword.text) {
                       return "The password does not match";
                     }
                     return null;
                   },
-                ),
-                const SizedBox(height: 20),
-
-                Row(
-                  children: [
-                    Checkbox(
-                      value: isChecked, // Bind the checkbox to the state variable
-                      onChanged: (bool? value) {
-                        setState(() {
-                          isChecked = value ??
-                              false; // Update the state when checkbox is pressed
-                        });
-                      },
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        text: "I Agree with ",
-                        style: TextStyle(
-                          color: Colors.brown[700],
-                          fontSize: 14,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: "privacy and policy",
-                            style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              color: Colors.brown[800],
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
                 ),
                 const SizedBox(height: 20),
                 // Sign Up Button
@@ -216,71 +202,97 @@ class SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> signUp(BuildContext context) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
 
-    if(signupKey.currentState!.validate()){
-      try {
-        final credential =
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email.text,
-          password: password.text,
-        );
-         CollectionReference collectionReference =
-         FirebaseFirestore.instance.collection('users');
-         General.user=AppUser(
-           emal: email.text,
-           userName: username.text,
-         );
-        collectionReference.doc(credential.user!.uid).set(General.user!.toJson());
-         log(credential.user!.uid);
-        showDialog(
-          barrierColor: Colors.transparent,
-          barrierDismissible: false,
-          context: context,
-          builder: (context) {
-            return Material(
-              color: Colors.white.withAlpha(0),
-              child: Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.symmetric(vertical: MediaQuery
-                    .sizeOf(context)
-                    .height * (4 / 10), horizontal: 60),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Loading...",
-                      style: TextStyle(fontSize: 15, color: Colors.black),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    CircularProgressIndicator(),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-        Future.delayed(Duration(seconds: 3),() {
-          Navigator.pop(context);
-          Navigator.pushNamed(context, '/bottomNav');
-        },);
-
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          print('The password provided is too weak.');
-        } else if (e.code == 'email-already-in-use') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('The account already exists for that email.')),
-          );
-        }
-      } catch (e) {
-        print(e);
-      }
+      // Save additional user info in Firestore (excluding password)
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set({
+        'name': usernameController.text.trim(),
+        'email': emailController.text.trim(),
+        'phone': phoneController.text.trim(),
+        'role': 'user', // Default role
+      });
+      Navigator.pushReplacementNamed(context, '/bottomNav'); // Navigate to home
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: ${e.toString()}")),
+      );
     }
   }
+
+// Future<void> signUp(BuildContext context) async {
+//
+//   if(signupKey.currentState!.validate()){
+//     try {
+//       final credential =
+//       await FirebaseAuth.instance.createUserWithEmailAndPassword(
+//         email: email.text,
+//         password: password.text,
+//       );
+//        CollectionReference collectionReference =
+//        FirebaseFirestore.instance.collection('users');
+//        General.user= AppUser(
+//          emal: email.text,
+//          userName: username.text,
+//        );
+//       collectionReference.doc(credential.user!.uid).set(General.user!.toJson());
+//        log(credential.user!.uid);
+//       showDialog(
+//         barrierColor: Colors.transparent,
+//         barrierDismissible: false,
+//         context: context,
+//         builder: (context) {
+//           return Material(
+//             color: Colors.white.withAlpha(0),
+//             child: Container(
+//               alignment: Alignment.center,
+//               margin: EdgeInsets.symmetric(vertical: MediaQuery
+//                   .sizeOf(context)
+//                   .height * (4 / 10), horizontal: 60),
+//               decoration: BoxDecoration(
+//                 color: Colors.grey[200],
+//                 borderRadius: BorderRadius.circular(10),
+//               ),
+//               child: const Column(
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 children: [
+//                   Text(
+//                     "Loading...",
+//                     style: TextStyle(fontSize: 15, color: Colors.black),
+//                   ),
+//                   SizedBox(
+//                     height: 20,
+//                   ),
+//                   CircularProgressIndicator(),
+//                 ],
+//               ),
+//             ),
+//           );
+//         },
+//       );
+//       Future.delayed(Duration(seconds: 3),() {
+//         Navigator.pop(context);
+//         Navigator.pushNamed(context, '/bottomNav');
+//       },);
+//
+//     } on FirebaseAuthException catch (e) {
+//       if (e.code == 'weak-password') {
+//         print('The password provided is too weak.');
+//       } else if (e.code == 'email-already-in-use') {
+//         ScaffoldMessenger.of(context).showSnackBar(
+//           const SnackBar(content: Text('The account already exists for that email.')),
+//         );
+//       }
+//     } catch (e) {
+//       print(e);
+//     }
+//   }
+// }
 }

@@ -96,6 +96,7 @@ class TripDetailsPageState extends State<TripDetailsPage> {
           // Stack لإضافة الصورة والأزرار فوقها
           Stack(
             children: [
+              //Expanded
               // عرض الصورة
               SizedBox(
                 height: 250,
