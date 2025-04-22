@@ -8,17 +8,17 @@ import 'package:adver_trail/Screens/forgot_password.dart';
 import 'package:adver_trail/Screens/notification.dart';
 import 'package:adver_trail/Screens/splash_screen.dart';
 import 'package:adver_trail/Screens/signup.dart';
-import 'package:adver_trail/Screens/verify.dart';
 import 'package:adver_trail/admin/admin_home.dart';
-import 'package:adver_trail/afterhomsecreen2/edit_profile.dart';
-import 'package:adver_trail/afterhomsecreen2/filter.dart';
-import 'package:adver_trail/afterhomsecreen2/points.dart';
-import 'package:adver_trail/component/custom_bottom_nav_bar.dart';
+import 'package:adver_trail/Screens/edit_profile.dart';
+import 'package:adver_trail/Screens/filter.dart';
+import 'package:adver_trail/Screens/points.dart';
 import 'package:adver_trail/component/email_link.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'CategoryHomeScreeen.dart/mountain_trails-page.dart';
+import 'Screens/trip_details_screen.dart';
+import 'model/trips.dart';
 
 
 void main() async {
@@ -32,30 +32,29 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: "/",
-      onGenerateRoute: _onGenerateRoute,
-      routes: {
-        '/': (context) => const SplashScreen(),
-        '/home': (context) => const HomePage(),
-        '/adminHome': (context) => const AdminHomeScreen(),
-        '/login': (context) => const LoginScreen(),
-        '/signup': (context) => const SignUpScreen(),
-       // '/verify': (context) => const VerifyScreen(),
-        '/volunteering': (context) => const VolunteeringPage(),
-        '/bottomNav': (context) => const CustomBottomNavBar(),
-        '/cycling': (context) => const CyclingPage(),
-        '/mountain_trails': (context) => const MountainTrailsPage(),
-        '/camping': (context) => const CampingPage(),
-        '/water_parks': (context) => const WaterParksPage(),
-        '/forgot_password': (context) => NewpasswordScreen(),
-        '/edit_profile': (context) => EditProfileScreen(),
-        '/notification': (context) => NotificationPage(),
-        '/filter': (context) => FilterPage(),
-        '/point': (context)=> PointsGiftsPage(),
-
-      },
+      initialRoute: '/',
+        getPages: [
+          GetPage(name: '/', page: () => const SplashScreen()),
+          GetPage(name: '/home', page: () => const HomePage()),
+          GetPage(name: '/adminHome', page: () => const AdminHomeScreen()),
+          GetPage(name: '/login', page: () => const LoginScreen()),
+          GetPage(name: '/signup', page: () => const SignUpScreen()),
+          GetPage(name: '/volunteering', page: () => const VolunteeringPage()),
+          GetPage(name: '/cycling', page: () => const CyclingPage()),
+          GetPage(name: '/mountain_trails', page: () => const MountainTrailsPage()),
+          GetPage(name: '/camping', page: () => const CampingPage()),
+          GetPage(name: '/water_parks', page: () => const WaterParksPage()),
+          GetPage(name: '/forgot_password', page: () => NewpasswordScreen()),
+          GetPage(name: '/edit_profile', page: () => EditProfileScreen()),
+          GetPage(name: '/notification', page: () => NotificationPage()),
+          GetPage(name: '/filter', page: () => FilterPage()),
+          GetPage(name: '/point', page: () => PointsGiftsPage()),
+          GetPage(name: '/tripDetails', page: () => TripDetailsPage(
+            trip: ModalRoute.of(context)?.settings.arguments as TripsModel,
+          )),
+        ]
     );
   }
 

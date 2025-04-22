@@ -1,8 +1,11 @@
+import 'package:adver_trail/admin/admin_home.dart';
+import 'package:adver_trail/component/custom_bottom_nav_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../component/custom_text_field.dart';
+import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -107,10 +110,8 @@ class LoginScreenState extends State<LoginScreen> {
                     onPressed: () async {
                       // Add navigation to the next screen, for example:
                       if (formKey.currentState!.validate()) {
-                        await signIn(context, emailController.text, passwordController.text);
-                        Future.delayed(Duration(seconds: 5), () {
-                          Navigator.pop(Get.context!);
-                        });
+                        await signIn(context, emailController.text.trim(), passwordController.text.trim());
+
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -162,27 +163,35 @@ class LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> signIn(
-      BuildContext context, String email, String password) async {
+  Future<void> signIn(BuildContext context, String email, String password) async {
     try {
       // Sign in with email and password
       UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+          .signInWithEmailAndPassword(email: email.trim(), password: password.trim());
 
       // Fetch user data from Firestore
       DocumentSnapshot userDoc = await FirebaseFirestore.instance
           .collection('users')
-          .doc(userCredential.user!.uid)
+          .doc(userCredential.user?.uid)  // Safely access UID
           .get();
-      if (userDoc.exists) {
-        String role = userDoc['role']; // Get role from Firestore
 
+      if (userDoc.exists) {
+        // Check for the 'role' field in Firestore and cast it to String
+        String? role = userDoc['role'] as String?;
+
+        if (role == null) {
+          // Handle case if role is missing
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Role is missing in the user data")),
+          );
+          return;
+        }
+
+        // Navigate based on the role
         if (role == 'admin') {
-          // Navigate to Admin Screen
-          Navigator.pushReplacementNamed(context, '/adminHome');
+          Get.offAll(AdminHomeScreen());
         } else {
-          // Navigate to User Screen
-          Navigator.pushReplacementNamed(context, '/bottomNav');
+          Get.offAll(HomePage());
         }
       } else {
         // Handle case where user document is not found

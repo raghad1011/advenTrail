@@ -12,8 +12,8 @@ class MountainTrailsPage extends StatelessWidget {
           Expanded(
             child: ForYouScroll(
               trips: [
-                {'images': ['assets/images/alsham (2).PNG'], 'title': 'Wadi Alsham', 'price': '28 JD'},
-                {'images': ['assets/images/qais (3).JPG'], 'title': 'Um Qais', 'price': '25 JD'},
+                // {'images': ['assets/images/alsham (2).PNG'], 'title': 'Wadi Alsham', 'price': '28 JD'},
+                // {'images': ['assets/images/qais (3).JPG'], 'title': 'Um Qais', 'price': '25 JD'},
               ],
             ),
           ),

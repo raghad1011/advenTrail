@@ -1,48 +1,51 @@
-import 'package:adver_trail/model/trips.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class BookModel{
+class BookingModel{
   String? id;
-  TripsModel? trip;
   DocumentReference? tripId;
-  String? userName;
-  double? price;
+  DocumentReference? userId;
+  int? price;
   String? status;
-  Timestamp? date;
+  int? numberOfGuests;
+  Timestamp? bookingDate;
+  Timestamp? tripDate;
   bool? is_deleted;
 
-  BookModel({
+  BookingModel({
     this.id,
     required this.tripId,
-    this.trip,
-    this.userName,
+    this.userId,
     this.price,
     this.status,
+    this.numberOfGuests,
     this.is_deleted,
-    this.date
+    this.bookingDate,
+    this.tripDate,
   });
 
-  BookModel.fromJson(Map<String,dynamic> json){
+  BookingModel.fromJson(Map<String,dynamic> json){
     id = json['id'];
-    trip = json['trip'];
     tripId = json['tripId'];
-    userName = json['userName'];
+    userId = json['userId'];
     status = json['status'];
+    numberOfGuests = json['numberOfGuests'];
     price = json['price'];
     is_deleted = json['is_deleted'];
-    date = json['date'];
+    bookingDate = json['bookingDate'];
+    tripDate = json['tripDate'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['trip'] = trip;
     data['tripId'] = tripId;
-    data['userName'] = userName;
+    data['userId'] = userId;
     data['status'] = status;
+    data['numberOfGuests'] = numberOfGuests;
     data['price'] = price;
     data['is_deleted'] = is_deleted;
-    data['date'] = date;
+    data['bookingDate'] = bookingDate;
+    data['tripDate'] = tripDate;
     return data;
   }
 

@@ -1,5 +1,7 @@
+import 'package:adver_trail/admin/manage_bookings_screen.dart';
 import 'package:adver_trail/admin/manage_trips_screen.dart';
 import 'package:adver_trail/admin/manage_users_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AdminHomeScreen extends StatefulWidget {
@@ -52,12 +54,43 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildAdminSection(Icons.book, "Booking", () {}),
+                      _buildAdminSection(Icons.book, "Booking", () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ManageBookingsScreen(),
+                          ),
+                        );
+                      }),
                       SizedBox(width: 20),
                       _buildAdminSection(Icons.manage_history, "status", () {}),
                     ],
                   ),
                   SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () async{
+                        await FirebaseAuth.instance.signOut();
+                        Navigator.pushReplacementNamed(context, '/login');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.brown[800],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      child: const Text(
+                        'Sign out',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

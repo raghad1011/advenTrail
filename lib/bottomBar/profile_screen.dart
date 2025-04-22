@@ -1,6 +1,8 @@
 import 'package:adver_trail/component/ProfileListItem.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -15,7 +17,7 @@ class ProfilePage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black, size: 32),
           onPressed: () {
-            Navigator.pushNamed(context, '/bottomNav');
+            Get.back();
           },
         ),
         title: const Text(
@@ -57,26 +59,12 @@ class ProfilePage extends StatelessWidget {
                 ProfileListItem(
                   icon: Icons.card_giftcard,
                   title: 'Points',
-                  trailing: const Text(
-                    '10',
-                    style: TextStyle(
-                      color: Colors.orange,
-                      fontWeight: FontWeight.bold,fontSize:16,
-                    ),
-                  ),
                   onTap: () {Navigator.pushNamed(context, '/point');},
                 ),
               ],
             ),
           ),
           const Divider(color: Colors.black45),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-            child: Text(
-              'Contact Us',
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(

@@ -79,7 +79,7 @@ class _OnboardingPageViewState extends State<OnboardingPageView> {
                           image: AssetImage(content[i].imagePath),
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
                         Text(
                           content[i].title,
@@ -89,7 +89,7 @@ class _OnboardingPageViewState extends State<OnboardingPageView> {
                     fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(
-                          height: 15,
+                          height: 10,
                         ),
                         Text(
                           content[i].description,

@@ -12,7 +12,6 @@ class ManageUsersScreen extends StatefulWidget {
 }
 
 class _ManageUsersScreenState extends State<ManageUsersScreen> {
-
   final FirebaseService firebaseService = FirebaseService();
   late Future<QuerySnapshot> usersFuture;
 
@@ -21,7 +20,6 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
     super.initState();
     usersFuture = firebaseService.getAllUsers();
   }
-
 
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -34,7 +32,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text('Name: ${userData['name']}', style: TextStyle(fontSize: 18)),
               SizedBox(height: 10),
@@ -52,7 +50,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
 
   void showUserOptions(
       BuildContext context, String userId, Map<String, dynamic> userData) {
-    nameController.text = userData['userName'] ?? '';
+    nameController.text = userData['name'] ?? '';
     phoneController.text = userData['phone'] ?? '';
 
     showModalBottomSheet(
@@ -60,8 +58,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
       builder: (BuildContext context) {
         return Container(
           padding: EdgeInsets.all(16),
-          child: Column(mainAxisSize: MainAxisSize.min,
-              children: [
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
             Text("Edit User",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             SizedBox(
@@ -72,9 +69,10 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                 Expanded(child: Text("Name")),
                 Expanded(
                     child: CustomTextField(
-                        controller: nameController,
-                        icon: Icons.person_2,
-                        hintText: userData['name'] ?? 'Enter Name',))
+                  controller: nameController,
+                  icon: Icons.person_2,
+                  hintText: userData['name'] ?? 'Enter Name',
+                ))
               ],
             ),
             SizedBox(
@@ -85,9 +83,10 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                 Expanded(child: Text("Phone Number")),
                 Expanded(
                     child: CustomTextField(
-                        controller: phoneController,
-                        icon: Icons.phone,
-                        hintText: userData['phone'] ?? 'Enter Phone Number',))
+                  controller: phoneController,
+                  icon: Icons.phone,
+                  hintText: userData['phone'] ?? 'Enter Phone Number',
+                ))
               ],
             ),
             SizedBox(
@@ -132,7 +131,9 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Manage Users"),),
+      appBar: AppBar(
+        title: Text("Manage Users"),
+      ),
       body: FutureBuilder<QuerySnapshot>(
         future: usersFuture,
         builder: (context, snapshot) {
@@ -162,14 +163,6 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                   motion: const DrawerMotion(),
                   children: [
                     SlidableAction(
-                      onPressed: (context) => userInfo(
-                          context, user.data() as Map<String, dynamic>),
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                      icon: Icons.info_outline,
-                      label: 'Info',
-                    ),
-                    SlidableAction(
                       onPressed: (context) => showUserOptions(context, user.id,
                           user.data() as Map<String, dynamic>),
                       backgroundColor: Colors.blue,
@@ -196,6 +189,8 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                     user['email'],
                     style: TextStyle(fontSize: 18.0),
                   ),
+                  onTap: () => userInfo(
+                      context, user.data() as Map<String, dynamic>),
                 ),
               );
             },

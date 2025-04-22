@@ -1,3 +1,4 @@
+import 'package:adver_trail/model/booking.dart';
 import 'package:adver_trail/model/trips.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -43,6 +44,7 @@ class FirebaseService {
     }
   }
 
+  // Add Trip
   static Future<void> addTrip(TripsModel model) async {
     try {
       await FirebaseFirestore.instance.collection('trips').add(model.toJson());
@@ -52,19 +54,7 @@ class FirebaseService {
     }
   }
 
-  // Add Trip
-  // static CollectionReference<TripsModel> addTrip =
-  // FirebaseFirestore.instance.collection('trips').withConverter<TripsModel>(
-  //   fromFirestore: (snapshot, options) {
-  //     var model = TripsModel.fromJson(snapshot.data()!);
-  //     model.id = snapshot.id;
-  //     return model;
-  //   },
-  //   toFirestore: (model, options) => model.toJson(),
-  // );
-
   // Get a specific Trip
-
   static DocumentReference<TripsModel> getTrip(String tripId) =>
       FirebaseFirestore.instance
           .collection('trips')
@@ -77,6 +67,7 @@ class FirebaseService {
               },
               toFirestore: (model, options) => model.toJson());
 
+  //update trip
   Future<void> updateTrip(
       String tripId, Map<String, dynamic> updatedTripData) async {
     try {
@@ -107,6 +98,77 @@ class FirebaseService {
               return model;
             },
             toFirestore: (model, options) => model.toJson())
-        .get(); // إرجاع الـ QuerySnapshot
+        .get();
+  }
+
+  //add Booking
+  Future<void> addBooking(BookingModel model) async {
+    await FirebaseFirestore.instance.collection('bookings').add(model.toJson());
+  }
+
+  Future<QuerySnapshot<BookingModel>> getAllBookings() async {
+    return await FirebaseFirestore.instance
+        .collection('bookings')
+        .withConverter<BookingModel>(
+            fromFirestore: (snapshot, options) {
+              var model = BookingModel.fromJson(snapshot.data()!);
+              model.id = snapshot.id;
+              return model;
+            },
+            toFirestore: (model, options) => model.toJson())
+        .get();
+  }
+
+  Future<QuerySnapshot> getBookingsForTrip(String tripId) async {
+    return await FirebaseFirestore.instance
+        .collection('bookings')
+        .where('tripId', isEqualTo: tripId)
+        .get();
+  }
+
+  Future<QuerySnapshot> getBookingsForUser(String userId) async {
+    return await FirebaseFirestore.instance
+        .collection('bookings')
+        .where('userId', isEqualTo: userId)
+        .get();
+  }
+
+  Future<void> deleteBooking(String bookingId) async {
+    await FirebaseFirestore.instance
+        .collection('bookings')
+        .doc(bookingId)
+        .delete();
   }
 }
+
+// static CollectionReference ADD_Book =
+// FirebaseFirestore.instance.collection('booking').withConverter<BookingModel>(
+//     fromFirestore: (snapshot, options) {
+//       var model = BookingModel.fromJson(snapshot.data()!);
+//       model.id = snapshot.id;
+//       return model;
+//     },
+//     toFirestore: (model, options) => model.toJson());
+//
+// static DocumentReference<BookingModel> GET_Book(String id) =>
+// FirebaseFirestore.instance
+//     .collection('booking')
+//     .doc(id)
+//     .withConverter<BookingModel>(
+// fromFirestore: (snapshot, options) {
+// var model = BookingModel.fromJson(snapshot.data()!);
+// model.id = snapshot.id;
+// return model;
+// },
+// toFirestore: (model, options) => model.toJson());
+//
+// static Query<TripsModel> GETAll_Booking = FirebaseFirestore.instance
+//     .collection('booking')
+//     .where("is_deleted", isEqualTo: false)
+//     .withConverter<BookingModel>(
+// fromFirestore: (snapshot, options) {
+// var model = BookingModel.fromJson(snapshot.data()!);
+// model.id = snapshot.id;
+// return model;
+// },
+// toFirestore: (model, options) => model.toJson()) as Query<TripsModel>;

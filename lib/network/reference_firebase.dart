@@ -1,9 +1,10 @@
-import 'package:adver_trail/model/booking.dart';
 import 'package:adver_trail/model/trips.dart';
 import 'package:adver_trail/network/firebase_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ReferenceFirebase {
+  final storageRef = FirebaseStorage.instance.ref();
   //  users
   final CollectionReference users =
       FirebaseFirestore.instance.collection('users');
@@ -15,40 +16,8 @@ class ReferenceFirebase {
 //  CollectionReference -- DocumentReference -- Query
 
 //  bookings
-  static CollectionReference booking =
-      FirebaseFirestore.instance.collection('booking');
-
-  static CollectionReference ADD_Book =
-      FirebaseFirestore.instance.collection('booking').withConverter<BookModel>(
-          fromFirestore: (snapshot, options) {
-            var model = BookModel.fromJson(snapshot.data()!);
-            model.id = snapshot.id;
-            return model;
-          },
-          toFirestore: (model, options) => model.toJson());
-
-  static DocumentReference<BookModel> GET_Book(String id) =>
-      FirebaseFirestore.instance
-          .collection('booking')
-          .doc(id)
-          .withConverter<BookModel>(
-              fromFirestore: (snapshot, options) {
-                var model = BookModel.fromJson(snapshot.data()!);
-                model.id = snapshot.id;
-                return model;
-              },
-              toFirestore: (model, options) => model.toJson());
-
-  static Query<TripsModel> GETAll_Booking = FirebaseFirestore.instance
-      .collection('booking')
-      .where("is_deleted", isEqualTo: false)
-      .withConverter<BookModel>(
-          fromFirestore: (snapshot, options) {
-            var model = BookModel.fromJson(snapshot.data()!);
-            model.id = snapshot.id;
-            return model;
-          },
-          toFirestore: (model, options) => model.toJson()) as Query<TripsModel>;
+  static CollectionReference bookings =
+      FirebaseFirestore.instance.collection('bookings');
 
   static addEditTrips(TripsModel model) async {
     if (model.id.isEmpty) {

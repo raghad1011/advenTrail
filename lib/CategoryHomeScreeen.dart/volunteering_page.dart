@@ -8,9 +8,9 @@ class VolunteeringPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("Volunteering")),
       body: Container(child: const ForYouScroll(trips: [
-  {
-    'images': ['assets/images/um (1).JPG'],
-    'title': 'Um Alnaml',}
+  // {
+  //   'images': ['assets/images/um (1).JPG'],
+  //   'title': 'Um Alnaml',}
 
       ],),),
     );
