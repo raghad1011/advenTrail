@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:adver_trail/component/date.dart';
 import 'package:adver_trail/component/make_lines.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../component/custom_bottom_nav_bar.dart';
 import '../model/trips.dart';
 import 'booking_screen.dart';
@@ -237,15 +239,21 @@ class TripDetailsPageState extends State<TripDetailsPage> {
                         Row(
                           children: [
                             Expanded(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: Color(0xFFBDBDBD),
-                                  borderRadius: BorderRadius.circular(16),
+                              child: GestureDetector(
+                                onTap: ()async {
+                                  await launchUrl(Uri.parse(
+                                            'google.navigation:q=${widget.trip.trailRoute.latitude},${widget.trip.trailRoute.longitude}'));
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFFBDBDBD),
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Image.asset('assets/images/distance.png',
+                                      width: 40, height: 40),
                                 ),
-                                child: Image.asset('assets/images/distance.png',
-                                    width: 40, height: 40),
                               ),
                             ),
                             Expanded(
