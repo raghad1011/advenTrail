@@ -1,14 +1,15 @@
 import 'dart:convert';
 import 'dart:developer';
+
+import 'package:adver_trail/Screens/splash_screen.dart';
 import 'package:adver_trail/component/date.dart';
 import 'package:adver_trail/component/make_lines.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../component/custom_bottom_nav_bar.dart';
+
 import '../model/trips.dart';
 import 'booking_screen.dart';
 import 'home_screen.dart';
@@ -240,9 +241,21 @@ class TripDetailsPageState extends State<TripDetailsPage> {
                           children: [
                             Expanded(
                               child: GestureDetector(
-                                onTap: ()async {
-                                  await launchUrl(Uri.parse(
-                                            'google.navigation:q=${widget.trip.trailRoute.latitude},${widget.trip.trailRoute.longitude}'));
+                                onTap: () async {
+                                  log('${cureentAddress.latitude}');
+                                  log('${cureentAddress.longitude}');
+                                  launchUrl(
+                                    Uri.parse(
+                                        'https://www.google.com/maps/dir/?api=1&origin=${cureentAddress.latitude},${cureentAddress.longitude}&destination=${widget.trip.trailRoute.latitude},${widget.trip.trailRoute.longitude}&travelmode=driving'),
+                                    mode: LaunchMode.externalApplication,
+                                  );
+                                  // final url =
+                                  //     'https://www.google.com/maps/dir/?api=1&origin=${cureentAddress.latitude},${cureentAddress.longitude}&destination=${widget.trip.trailRoute.latitude},${widget.trip.trailRoute.latitude}&travelmode=driving';
+
+                                  // if (await canLaunchUrl(Uri.parse(url))) {
+                                  //   await launchUrl(Uri.parse(url),
+                                  //       mode: LaunchMode.externalApplication);
+                                  // }
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
@@ -251,8 +264,10 @@ class TripDetailsPageState extends State<TripDetailsPage> {
                                     color: Color(0xFFBDBDBD),
                                     borderRadius: BorderRadius.circular(16),
                                   ),
-                                  child: Image.asset('assets/images/distance.png',
-                                      width: 40, height: 40),
+                                  child: Image.asset(
+                                      'assets/images/distance.png',
+                                      width: 40,
+                                      height: 40),
                                 ),
                               ),
                             ),
@@ -552,12 +567,14 @@ class TripDetailsPageState extends State<TripDetailsPage> {
           ),
           onPressed: () {
             showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-              ),
-              builder: (context) => BookingBottomSheet(trip: widget.trip,));
+                context: context,
+                isScrollControlled: true,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                ),
+                builder: (context) => BookingBottomSheet(
+                      trip: widget.trip,
+                    ));
           },
           child: const Text(
             "Book Now",

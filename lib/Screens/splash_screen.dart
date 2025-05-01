@@ -1,9 +1,12 @@
+import 'dart:developer';
+
+import 'package:adver_trail/Screens/home_screen.dart';
 import 'package:adver_trail/Screens/pageview.dart';
 import 'package:adver_trail/model/address_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -11,40 +14,59 @@ class SplashScreen extends StatefulWidget {
   @override
   SplashScreenState createState() => SplashScreenState();
 }
+
 var cureentAddress = AddressModel();
-void permission()async{
-  
-PermissionStatus permissionStatus = await Permission.location.status;
-    if (permissionStatus != PermissionStatus.granted) {
-      await Permission.location.request();
-    }
-    if (permissionStatus.isGranted) {
-      Position position = await Geolocator.getCurrentPosition();
-      cureentAddress = AddressModel(
-          latitude: position.latitude, longitude: position.longitude);
-    }
+void permission() async {
+  PermissionStatus permissionStatus = await Permission.location.status;
+
+  // 1. إذا لم يكن مفعّلًا، اطلب الإذن
+  if (!permissionStatus.isGranted) {
+    permissionStatus =
+        await Permission.location.request(); // ← هنا نعيد القراءة
+  }
+
+  // 2. الآن تحقق من الحالة بعد الطلب
+  if (permissionStatus.isGranted) {
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    cureentAddress = AddressModel(
+      latitude: position.latitude,
+      longitude: position.longitude,
+    );
+    log('${position.latitude}');
+    log('${position.longitude}');
+  } else {
+    print("Location permission not granted");
+  }
 }
 
 class SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    
     super.initState();
     // After 3 seconds, navigate to OnboardingScreen1
 
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const OnboardingPageView()),
-        );
+        if (FirebaseAuth.instance.currentUser != null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const OnboardingPageView()),
+          );
+        }
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-     permission();
+    permission();
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
