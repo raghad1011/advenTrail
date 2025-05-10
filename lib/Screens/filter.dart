@@ -21,12 +21,6 @@ class FilterPageState extends State<FilterPage> {
         appBar: AppBar(
         backgroundColor: Colors.grey[200],
         elevation: 0,
-        leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: Colors.black, size: 32),
-    onPressed: () {
-    Navigator.pushNamed(context, '/bottomNav');
-    },
-    ),
           title: const Text(
             'Filter',
             style: TextStyle(
@@ -37,8 +31,8 @@ class FilterPageState extends State<FilterPage> {
           ),
           centerTitle: true,
         ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -74,31 +68,34 @@ class FilterPageState extends State<FilterPage> {
                 });
               },
             ),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.brown,
-                padding: const EdgeInsets.symmetric(
-                    vertical: 20,
-                    horizontal: 40), // تكبير المسافة الأفقية والعمودية
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(12), // الحفاظ على الحواف الدائرية
-                ),
-                minimumSize: const Size(
-                    double.infinity, 70), // تكبير الزر عموديًا وعرضيًا
-              ),
-              child: const Text(
-                'See trails',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20, // تكبير حجم الخط
-                ),
-              ),
-            ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Padding(padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.brown,
+            padding: const EdgeInsets.symmetric(
+                vertical: 20,
+                horizontal: 40),
+            shape: RoundedRectangleBorder(
+              borderRadius:
+              BorderRadius.circular(12),
+            ),
+            minimumSize: const Size(
+             50,
+              50,
+            ),
+          ),
+          child: const Text(
+            'See trails',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 20, // تكبير حجم الخط
+            ),
+          ),
         ),
       ),
     );

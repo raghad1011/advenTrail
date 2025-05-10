@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class ReadMoreText extends StatefulWidget {
   final String text;
   final int maxLines;
-  final TextStyle? style; // أضف خاصية style هنا
+  final TextStyle? style;
 
   const ReadMoreText({
     super.key,
     required this.text,
     this.maxLines = 3,
-    this.style, // استقبل الخاصية هنا
+    this.style,
   });
 
   @override
@@ -28,7 +28,8 @@ class ReadMoreTextState extends State<ReadMoreText> {
           widget.text,
           maxLines: isExpanded ? null : widget.maxLines,
           overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
-          style: widget.style, // استخدم الخاصية هنا
+          style: widget.style,
+
         ),
         const SizedBox(height: 8),
         GestureDetector(
@@ -40,8 +41,9 @@ class ReadMoreTextState extends State<ReadMoreText> {
           child: Text(
             isExpanded ? 'See Less' : 'See More',
             style: const TextStyle(
-              color: Colors.blue,
+              color: Colors.black54,
               fontWeight: FontWeight.bold,
+              fontSize: 12
             ),
           ),
         ),

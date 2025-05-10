@@ -90,7 +90,6 @@ class FirebaseService {
   Future<QuerySnapshot<TripsModel>> getAllTrips() async {
     return await FirebaseFirestore.instance
         .collection('trips')
-        // .where("is_deleted", isEqualTo: false)
         .withConverter<TripsModel>(
             fromFirestore: (snapshot, options) {
               var model = TripsModel.fromJson(snapshot.data()!);
@@ -139,6 +138,13 @@ class FirebaseService {
         .doc(bookingId)
         .delete();
   }
+  Future<void> updateBooking(String bookingId, Map<String, dynamic> data) async {
+    await FirebaseFirestore.instance
+        .collection('bookings')
+        .doc(bookingId)
+        .update(data);
+  }
+
 }
 
 // static CollectionReference ADD_Book =

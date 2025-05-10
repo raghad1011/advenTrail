@@ -1,17 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../component/custom_text_field.dart';
+import 'login.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  SignUpScreenState createState() => SignUpScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class SignUpScreenState extends State<SignUpScreen> {
-  bool isChecked = false; // Variable to track the checkbox state
+class _SignupScreenState extends State<SignupScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -26,176 +27,255 @@ class SignUpScreenState extends State<SignUpScreen> {
       key: signupKey,
       child: Scaffold(
         backgroundColor: Colors.grey[100],
-        body: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+        body: Stack(
+          children: [
+            Stack(
               children: [
-                // Positioned(
-                //   top: 80,
-                //   left: 150,
-                Image.asset('assets/images/Group 4.png', width: 90, height: 90),
-
-                const SizedBox(height: 20),
-                // Title
-                const Text(
-                  "Take the first step and explore the untamed beauty of Jordan's hidden trails!",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900, // Strong bold
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 30),
-                // Username Field
-                if (errorMessage != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: Text(
-                      errorMessage!,
-                      style: const TextStyle(color: Colors.red, fontSize: 14),
-                    ),
-                  ),
-                CustomTextField(
-                  icon: Icons.person,
-                  hintText: 'Username',
-                  controller: usernameController,
-                  validator: (p0) {
-                    if (p0!.isEmpty) {
-                      return "this field required";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 15),
-                // Email Field
-                CustomTextField(
-                  icon: Icons.email,
-                  hintText: 'Email',
-                  controller: emailController,
-                  validator: (p0) {
-                    if (p0!.isEmpty) {
-                      return "this field required";
-                    }
-                    return null;
-                  },
-                ),
-                // const SizedBox(height: 15),
-                // TextFormField(
-                //   controller: phoneController,
-                //   decoration: InputDecoration(
-                //     prefixIcon: Icon(Icons.phone),
-                //     labelText: 'Phone Number',
-                //     border: OutlineInputBorder(),
-                //   ),
-                //   validator: (p0) {
-                //     if (p0!.isEmpty) {
-                //       return "this field required";
-                //     }
-                //     return null;
-                //   },
-                // ),
-                const SizedBox(height: 15),
-                CustomTextField(
-                  icon: Icons.phone,
-                  hintText: 'Phone Number',
-                  controller: phoneController,
-                  validator: (p0) {
-                    if (p0!.isEmpty) {
-                      return "this field required";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 15),
-                // Password Field
-                CustomTextField(
-                  icon: Icons.lock,
-                  hintText: 'Password',
-                  obscureText: true,
-                  //suffixIcon: Icons.visibility,
-                  controller: passwordController,
-                  validator: (p0) {
-                    if (p0!.isEmpty) {
-                      return "this field required";
-                    } else if (p0.length < 8) {
-                      return "the password is less than 8";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 15),
-                // Confirm Password Field
-                CustomTextField(
-                  icon: Icons.lock,
-                  hintText: 'Confirm Password',
-                  obscureText: true,
-                  //suffixIcon: Icons.visibility,
-                  controller: conPassword,
-                  validator: (p0) {
-                    if (p0!.isEmpty) {
-                      return "this field required";
-                    } else if (passwordController.text != conPassword.text) {
-                      return "The password does not match";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                // Sign Up Button
-                SizedBox(
+                Image.asset(
+                  'assets/images/onborad3.jpeg',
+                  fit: BoxFit.cover,
                   width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await signUp(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.brown[800],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                    ),
-                    child: const Text(
-                      'Sign up',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                  height: double.infinity,
                 ),
-                const SizedBox(height: 20),
-                // Login Text
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Already have an account? ",
-                      style: TextStyle(fontSize: 14, color: Colors.black87),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/login');
-                      },
-                      child: const Text(
-                        "Log in",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.brown,
+                Container(
+                  color: Colors.black.withOpacity(0.5),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.20, left: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Text(
+                          'Sign Up',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Text('Join the Exploration: Sign Up for Free',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            )),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
+            Positioned.fill(
+              top: 200,
+              child: SingleChildScrollView(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(25),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      children: [
+                        if (errorMessage != null)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10.0),
+                            child: Text(
+                              errorMessage!,
+                              style: const TextStyle(
+                                  color: Colors.red, fontSize: 14),
+                            ),
+                          ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'User Name',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        CustomTextField(
+                          icon: Icons.person_2_outlined,
+                          hintText: 'Input user name here',
+                          controller: usernameController,
+                          validator: (p0) {
+                            if (p0!.isEmpty) {
+                              return "this field required";
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Email',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        CustomTextField(
+                          icon: Icons.email_outlined,
+                          hintText: 'ex: user@examle.com',
+                          controller: emailController,
+                          validator: (p0) {
+                            if (p0!.isEmpty) {
+                              return "Email is required";
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Phone Number',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        CustomTextField(
+                          icon: Icons.phone,
+                          hintText: 'Phone Number',
+                          controller: phoneController,
+                          validator: (p0) {
+                            if (p0!.isEmpty) {
+                              return "this field required";
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Password',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        CustomTextField(
+                          icon: Icons.lock_outline,
+                          hintText: '********',
+                          obscureText: true,
+                          //suffixIcon: Icons.visibility,
+                          controller: passwordController,
+                          validator: (p0) {
+                            if (p0!.isEmpty) {
+                              return "this field required";
+                            } else if (p0.length < 8) {
+                              return "the password is less than 8";
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Confirm Password',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        CustomTextField(
+                          icon: Icons.lock_outline,
+                          hintText: '********',
+                          obscureText: true,
+                          //suffixIcon: Icons.visibility,
+                          controller: conPassword,
+                          validator: (p0) {
+                            if (p0!.isEmpty) {
+                              return "this field required";
+                            } else if (passwordController.text !=
+                                conPassword.text) {
+                              return "The password does not match";
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 15),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await signUp(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              minimumSize: Size(double.infinity, 50),
+                              backgroundColor: Colors.brown[800],
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              )),
+                          child: const Text(
+                            'Sign up',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              shadows: [
+                                Shadow(
+                                  offset: Offset(0, 2),
+                                  blurRadius: 4,
+                                  color: Colors.black26,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Already Have Account? ",
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.black87),
+                            ),
+                            GestureDetector(
+                              onTap: () => Get.to(() => LoginScreen()),
+                              child: const Text(
+                                "Login",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.brown,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -204,7 +284,7 @@ class SignUpScreenState extends State<SignUpScreen> {
   Future<void> signUp(BuildContext context) async {
     try {
       UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
@@ -226,73 +306,4 @@ class SignUpScreenState extends State<SignUpScreen> {
       );
     }
   }
-
-// Future<void> signUp(BuildContext context) async {
-//
-//   if(signupKey.currentState!.validate()){
-//     try {
-//       final credential =
-//       await FirebaseAuth.instance.createUserWithEmailAndPassword(
-//         email: email.text,
-//         password: password.text,
-//       );
-//        CollectionReference collectionReference =
-//        FirebaseFirestore.instance.collection('users');
-//        General.user= AppUser(
-//          emal: email.text,
-//          userName: username.text,
-//        );
-//       collectionReference.doc(credential.user!.uid).set(General.user!.toJson());
-//        log(credential.user!.uid);
-//       showDialog(
-//         barrierColor: Colors.transparent,
-//         barrierDismissible: false,
-//         context: context,
-//         builder: (context) {
-//           return Material(
-//             color: Colors.white.withAlpha(0),
-//             child: Container(
-//               alignment: Alignment.center,
-//               margin: EdgeInsets.symmetric(vertical: MediaQuery
-//                   .sizeOf(context)
-//                   .height * (4 / 10), horizontal: 60),
-//               decoration: BoxDecoration(
-//                 color: Colors.grey[200],
-//                 borderRadius: BorderRadius.circular(10),
-//               ),
-//               child: const Column(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: [
-//                   Text(
-//                     "Loading...",
-//                     style: TextStyle(fontSize: 15, color: Colors.black),
-//                   ),
-//                   SizedBox(
-//                     height: 20,
-//                   ),
-//                   CircularProgressIndicator(),
-//                 ],
-//               ),
-//             ),
-//           );
-//         },
-//       );
-//       Future.delayed(Duration(seconds: 3),() {
-//         Navigator.pop(context);
-//         Navigator.pushNamed(context, '/bottomNav');
-//       },);
-//
-//     } on FirebaseAuthException catch (e) {
-//       if (e.code == 'weak-password') {
-//         print('The password provided is too weak.');
-//       } else if (e.code == 'email-already-in-use') {
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           const SnackBar(content: Text('The account already exists for that email.')),
-//         );
-//       }
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
-// }
 }

@@ -9,7 +9,7 @@ class TripsModel {
   final String location;
   final GeoPoint trailRoute;
   final String difficulty;
-  final String accessibility;
+  final String? accessibility;
   final String distance;
   final String duration;
   final String imageUrl;
@@ -27,7 +27,7 @@ class TripsModel {
     required this.location,
     required this.trailRoute,
     required this.difficulty,
-    required this.accessibility,
+    this.accessibility,
     required this.distance,
     required this.duration,
     required this.imageUrl,

@@ -1,14 +1,16 @@
+import 'package:adver_trail/Screens/category_trip_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CategoryScroll extends StatelessWidget {
   const CategoryScroll({super.key});
 
   final List<Map<String, dynamic>> categories = const [
-    {'image': 'assets/images/image 6.png', 'label': 'Volunteering', 'route': '/volunteering'},
-    {'image': 'assets/images/image.png', 'label': 'Cycling', 'route': '/cycling'},
-    {'image': 'assets/images/image 4.png', 'label': 'Mountain trails', 'route': '/mountain_trails'},
-    {'image': 'assets/images/image 10.png', 'label': 'Camping', 'route': '/camping'},
-    {'image': 'assets/images/image 11.png', 'label': 'Water Parks', 'route': '/water_parks'},
+    {'image': 'assets/images/cycle.jpeg', 'label': 'Cycling', 'route': '/cycling'},
+    {'image': 'assets/images/mountain.jpeg', 'label': 'Mountain', 'route': '/Mountain'},
+    {'image': 'assets/images/hiking.jpeg', 'label': 'Hiking', 'route': '/hiking'},
+    {'image': 'assets/images/camping.jpeg', 'label': 'Camping', 'route': '/camping'},
+    {'image': 'assets/images/water Activities.jpeg', 'label': 'Water Activities', 'route': '/water_Activities'},
   ];
 
   @override
@@ -17,22 +19,21 @@ class CategoryScroll extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: categories.map((category) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: GestureDetector(
-              onTap: () {
-                // الانتقال إلى صفحة جديدة بناءً على المسار
-                Navigator.pushNamed(context, category['route']);
-              },
+          return GestureDetector(
+            onTap: () {
+              Get.to (() => CategoryTripsScreen(categoryName: category['label']),);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 17.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    width: 70,
-                    height: 70,
+                    width: 50,
+                    height: 50,
                     decoration: BoxDecoration(
                       color: Colors.brown[100],
-                      borderRadius: BorderRadius.circular(12), // زوايا دائرية
+                      borderRadius: BorderRadius.circular(50),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.1),
@@ -42,11 +43,10 @@ class CategoryScroll extends StatelessWidget {
                       ],
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(50),
                       child: Image.asset(
                         category['image'],
-                        width: 40, // عرض الصورة
-                        height: 40,  // لضبط حجم الصورة
+                        fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return const Icon(Icons.broken_image, size: 30, color: Colors.grey);
                         },

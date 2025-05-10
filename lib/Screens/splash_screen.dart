@@ -13,22 +13,22 @@ class SplashScreen extends StatefulWidget {
 }
 var cureentAddress = AddressModel();
 void permission()async{
-  
-PermissionStatus permissionStatus = await Permission.location.status;
-    if (permissionStatus != PermissionStatus.granted) {
-      await Permission.location.request();
-    }
-    if (permissionStatus.isGranted) {
-      Position position = await Geolocator.getCurrentPosition();
-      cureentAddress = AddressModel(
-          latitude: position.latitude, longitude: position.longitude);
-    }
+
+  PermissionStatus permissionStatus = await Permission.location.status;
+  if (permissionStatus != PermissionStatus.granted) {
+    await Permission.location.request();
+  }
+  if (permissionStatus.isGranted) {
+    Position position = await Geolocator.getCurrentPosition();
+    cureentAddress = AddressModel(
+        latitude: position.latitude, longitude: position.longitude);
+  }
 }
 
 class SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    
+
     super.initState();
     // After 3 seconds, navigate to OnboardingScreen1
 
@@ -36,7 +36,7 @@ class SplashScreenState extends State<SplashScreen> {
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const OnboardingPageView()),
+          MaterialPageRoute(builder: (context) => const OnboardingScreen()),
         );
       }
     });
@@ -44,41 +44,36 @@ class SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-     permission();
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
+    permission();
+    return  Scaffold(
             body: Center(
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child:
-                    Image.asset('assets/images/talal.jpg', fit: BoxFit.cover),
-              ),
-              Positioned(
-                top: MediaQuery.of(context).size.height *
-                    0.2, // 20% from the top
-                left: MediaQuery.of(context).size.width / 2 -
-                    65, // center (130/2 = 65)
-                child: Column(
-                  children: [
-                    Image.asset('assets/images/Group 4.png',
-                        width: 130, height: 130),
-                    const SizedBox(height: 5),
-                    // spacing between logo and text
-                    const Text(
-                      'AdvenTrail',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff573f2b),
-                      ),
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child:
+                    Image.asset('assets/images/admin_bg.jpeg', fit: BoxFit.cover),
+                  ),
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/images/Group 4.png',
+                            width: 130, height: 130),
+                        const SizedBox(height: 5),
+                        // spacing between logo and text
+                        const Text(
+                          'AdvenTrail',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff573f2b),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        )));
+            ));
   }
 }
