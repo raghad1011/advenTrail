@@ -53,28 +53,30 @@ class NewpasswordScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () async {
-                String email = emailController.text.trim();
-                if (email.isNotEmpty) {
-                  await sendSignInLinkToEmail();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Email link sent to $email')),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Please enter your email')),
-                  );
-                }
-                Future.delayed(
-                  Duration(seconds: 3),
-                  () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                onPressed: () async {
+                  String email = emailController.text.trim();
+                  if (email.isNotEmpty) {
+                    try {
+                      await sendSignInLinkToEmail();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Email link sent to $email')),
+                      );
+                      await Future.delayed(Duration(seconds: 3));
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Failed to send email: ${e.toString()}')),
+                      );
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Please enter your email')),
                     );
-                  },
-                );
-              },
+                  }
+                },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.brown[800],
                 shape: RoundedRectangleBorder(
@@ -94,6 +96,7 @@ class NewpasswordScreen extends StatelessWidget {
   }
 
   Future<void> sendSignInLinkToEmail() async {
-    FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text);
+    await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: emailController.text);
   }
 }

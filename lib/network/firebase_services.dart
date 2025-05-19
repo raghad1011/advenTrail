@@ -121,9 +121,11 @@ class FirebaseService {
   Future<QuerySnapshot> getBookingsForTrip(String tripId) async {
     return await FirebaseFirestore.instance
         .collection('bookings')
-        .where('tripId', isEqualTo: tripId)
+        .where('tripId',
+        isEqualTo: FirebaseFirestore.instance.collection('trips').doc(tripId))
         .get();
   }
+
 
   Future<QuerySnapshot> getBookingsForUser(String userId) async {
     return await FirebaseFirestore.instance

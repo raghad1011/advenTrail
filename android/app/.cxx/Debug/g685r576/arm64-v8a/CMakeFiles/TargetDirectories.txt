@@ -1,0 +1,2 @@
+C:/Users/DASH ARABIA/Documents/GitHub/advenTrail/android/app/.cxx/Debug/g685r576/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/DASH ARABIA/Documents/GitHub/advenTrail/android/app/.cxx/Debug/g685r576/arm64-v8a/CMakeFiles/rebuild_cache.dir

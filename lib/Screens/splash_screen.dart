@@ -1,8 +1,5 @@
 import 'package:adver_trail/Screens/pageview.dart';
-import 'package:adver_trail/model/address_model.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -10,19 +7,6 @@ class SplashScreen extends StatefulWidget {
 
   @override
   SplashScreenState createState() => SplashScreenState();
-}
-var cureentAddress = AddressModel();
-void permission()async{
-
-  PermissionStatus permissionStatus = await Permission.location.status;
-  if (permissionStatus != PermissionStatus.granted) {
-    await Permission.location.request();
-  }
-  if (permissionStatus.isGranted) {
-    Position position = await Geolocator.getCurrentPosition();
-    cureentAddress = AddressModel(
-        latitude: position.latitude, longitude: position.longitude);
-  }
 }
 
 class SplashScreenState extends State<SplashScreen> {
@@ -44,7 +28,6 @@ class SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    permission();
     return  Scaffold(
             body: Center(
               child: Stack(

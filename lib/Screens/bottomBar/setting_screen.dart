@@ -1,6 +1,6 @@
 import 'package:adver_trail/component/build_menu_item.dart';
 import 'package:flutter/material.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
@@ -39,6 +39,19 @@ class SettingScreen extends StatelessWidget {
               icon: Icons.lock_outline,
               title: 'Privacy Policy',
               onTap: () {},
+            ),
+            buildMenuItem(
+              icon: Icons.format_quote_outlined,
+              title: 'Suggested',
+              onTap: () async {
+                final url = Uri.parse(
+                    "https://docs.google.com/forms/d/e/1FAIpQLSfs23MlpfXPOIBu1e3z098hd2i749gBXAy_YUFMRZZIswJAiw/formResponse");
+                if (await canLaunchUrl(url)) {
+                  await launchUrl(url, mode: LaunchMode.externalApplication);
+                } else {
+                  throw 'Could not launch $url';
+                }
+              },
             ),
           ],
         ),

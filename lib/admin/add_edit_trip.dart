@@ -33,7 +33,7 @@ class AddEditTripScreenState extends State<AddEditTripScreen> {
   TextEditingController maxGuestsController = TextEditingController();
   DateTime? tripDate;
   TextEditingController tripDateController = TextEditingController();
-  TextEditingController statusController = TextEditingController();
+  TextEditingController tripStatusController = TextEditingController();
 
   File? imageFile;
   String? imageUrl;
@@ -60,7 +60,7 @@ class AddEditTripScreenState extends State<AddEditTripScreen> {
       tripDateController.text = tripDate != null
           ? DateFormat('yyyy-MM-dd – hh:mm a').format(tripDate!)
           : '';
-      statusController.text = trip.status ?? '';
+      tripStatusController.text = trip.tripStatus ?? '';
       imageUrl = trip.imageUrl;
     }
   }
@@ -316,7 +316,7 @@ class AddEditTripScreenState extends State<AddEditTripScreen> {
               ),
               SizedBox(height: 10),
               TextFormField(
-                controller: statusController,
+                controller: tripStatusController,
                 decoration: _inputDecoration('Status (optional)'),
               ),
               SizedBox(height: 20),
@@ -358,8 +358,8 @@ class AddEditTripScreenState extends State<AddEditTripScreen> {
                       imageUrl: uploadedImageUrl ?? widget.trip?.imageUrl ?? '',
                       tripDate: tripDate != null ? Timestamp.fromDate(
                           tripDate!) : null,
-                      status: statusController.text.isNotEmpty
-                          ? statusController.text
+                      tripStatus: tripStatusController.text.isNotEmpty
+                          ? tripStatusController.text
                           : null,
                       maxGuests: maxGuests,
                     );

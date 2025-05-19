@@ -1,15 +1,17 @@
-import 'package:adver_trail/Screens/bottomBar/map_screen.dart';
 import 'package:adver_trail/Screens/search_page.dart';
+import 'package:adver_trail/Screens/see_all_trips.dart';
 import 'package:adver_trail/Screens/trip_details_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../component/category_scroll.dart';
+import '../component/trip_card.dart';
 import '../model/trips.dart';
 import '../network/firebase_services.dart';
+import 'appBar/notification.dart';
 import 'filter.dart';
-import 'profile_screen.dart';
+import 'appBar/profile_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -34,7 +36,14 @@ class _HomePageState extends State<HomePage> {
 
   Future<List<TripsModel>> loadTrips() async {
     final snapshot = await _firebaseService.getAllTrips();
-    return snapshot.docs.map((doc) => doc.data()).toList();
+    final now = DateTime.now();
+
+    return snapshot.docs.map((doc) => doc.data()).where((trip) {
+      final tripDate = trip.tripDate?.toDate();
+      if (tripDate == null) return false;
+      return tripDate.isAfter(now) ||
+          tripDate.isAtSameMomentAs(DateTime(now.year, now.month, now.day));
+    }).toList();
   }
 
   Future<void> getUsername() async {
@@ -70,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                 TextSpan(
                   text: username,
                   style: TextStyle(
-                    color: Colors.brown,
+                    color: Colors.brown[700],
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -80,21 +89,20 @@ class _HomePageState extends State<HomePage> {
           ),
           actions: [
             IconButton(
-              icon: Icon(
-                  Icons.notifications_none, color: Colors.black, size: 28),
+              icon:
+                  Icon(Icons.notifications_none, color: Colors.black, size: 28),
               onPressed: () {
-                Get.to(() =>  LocationPage());
+                Get.to(() => NotificationScreen());
               },
             ),
             IconButton(
-              icon: Icon(
-                  Icons.person_2_outlined, color: Colors.black, size: 28),
+              icon:
+                  Icon(Icons.person_2_outlined, color: Colors.black, size: 28),
               onPressed: () {
-                Get.to(() =>  ProfilePage());
+                Get.to(() => ProfilePage());
               },
             )
-          ]
-      ),
+          ]),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         child: Column(
@@ -104,7 +112,7 @@ class _HomePageState extends State<HomePage> {
               'Have a nice trip \non your great holiday !',
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -120,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                     child: Container(
                       // width: Get.width/1.4,
                       // height: 30,
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
                         color: Color(0xffD1C4B9),
@@ -129,43 +137,69 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           Icon(
                             Icons.search,
-                            color: Colors.brown,
+                            color: Color(0xff361C0B),
                           ),
                           SizedBox(
-                            width: 5,
+                            width: 8,
                           ),
-                          Text('Find your next adventure...',style: TextStyle(
-                            color: Colors.black54,
-                          )),
+                          Text('Find your next adventure',
+                              style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: 12,
+                              )),
                         ],
                       ),
                     ),
                   ),
                 ),
-                SizedBox(width: 5,),
+                SizedBox(
+                  width: 5,
+                ),
                 GestureDetector(
                   onTap: () => Get.to(() => FilterPage()),
                   child: Container(
-                      width: 40,
-                      height: 40,
+                      width: 37,
+                      height: 37,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
-                        color: Colors.brown,
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomRight,
+                          end: Alignment.topLeft,
+                          colors: [
+                            Colors.brown[900]!,
+                            Colors.brown[400]!,
+                          ],
+                        ),
                       ),
-                      child: Icon(Icons.filter_alt_outlined ,color: Colors.white,)),
+                      child: Icon(
+                        Icons.filter_alt_outlined,
+                        color: Colors.white,
+                        size: 20,
+                      )),
                 ),
               ],
             ),
             SizedBox(height: 20),
-            Text('Categories', style: TextStyle(fontWeight: FontWeight.bold,),),
+            Text(
+              'Categories',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+            ),
             SizedBox(height: 10),
             CategoryScroll(),
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Popular Trips', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                Text('See all trips', style: TextStyle(color: Colors.brown)),
+                Text('Explore Trips',
+                    style:
+                        TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                GestureDetector(
+                    onTap: () => Get.to(() => SeeAllTripsPage()),
+                    child: Text('See All',
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.brown))),
               ],
             ),
             SizedBox(height: 10),
@@ -185,10 +219,9 @@ class _HomePageState extends State<HomePage> {
                 final trips = snapshot.data!;
 
                 return SizedBox(
-                  height: 270,
+                  height: 230,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.only(left: 16),
                     itemCount: trips.length,
                     itemBuilder: (context, index) {
                       final trip = trips[index];
@@ -198,53 +231,21 @@ class _HomePageState extends State<HomePage> {
                               arguments: trip);
                         },
                         child: Container(
-                          width: 200,
-                          margin: EdgeInsets.only(right: 16),
+                          width: 170,
+                          margin: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.3),
-                                blurRadius: 6,
+                                blurRadius: 10,
                                 spreadRadius: 2,
+                                offset: Offset(0, 3),
                               )
                             ],
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(12)),
-                                child: Image.network(
-                                  trip.imageUrl,
-                                  height: 150,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      trip.name,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    SizedBox(height: 4),
-                                    Text('${trip.price} JD',
-                                        style: TextStyle(color: Colors.grey)),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
+                          child: TripCard(trip: trip),
                         ),
                       );
                     },

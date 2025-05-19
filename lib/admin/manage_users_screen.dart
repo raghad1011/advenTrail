@@ -1,4 +1,3 @@
-import 'package:adver_trail/component/custom_text_field.dart';
 import 'package:adver_trail/network/firebase_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

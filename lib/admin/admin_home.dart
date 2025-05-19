@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../Screens/login.dart';
+import 'admin_rating_screen.dart';
 import 'manage_bookings_screen.dart';
 
 class AdminHomeScreen extends StatefulWidget {
@@ -76,9 +77,9 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                         ),
                       ),
                       _buildAdminCard(
-                        icon: Icons.check_circle,
-                        label: "Status",
-                        onTap: () {},
+                        icon: Icons.rate_review_outlined,
+                        label: "Ratings",
+                        onTap: () => Get.to(()=>AdminRatingsScreen()),
                       ),
                     ],
                   ),

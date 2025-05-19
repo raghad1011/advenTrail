@@ -6,7 +6,7 @@ class CategoryScroll extends StatelessWidget {
   const CategoryScroll({super.key});
 
   final List<Map<String, dynamic>> categories = const [
-    {'image': 'assets/images/cycle.jpeg', 'label': 'Cycling', 'route': '/cycling'},
+    {'image': 'assets/images/cycle.jpeg', 'label': 'Nature Trail', 'route': '/Nature Trail'},
     {'image': 'assets/images/mountain.jpeg', 'label': 'Mountain', 'route': '/Mountain'},
     {'image': 'assets/images/hiking.jpeg', 'label': 'Hiking', 'route': '/hiking'},
     {'image': 'assets/images/camping.jpeg', 'label': 'Camping', 'route': '/camping'},
@@ -57,7 +57,7 @@ class CategoryScroll extends StatelessWidget {
                   Text(
                     category['label'],
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 10,
                       fontWeight: FontWeight.bold,
                       color: Colors.black87,
                     ),

@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../Screens/bottomBar/map_screen.dart';
 import '../Screens/bottomBar/setting_screen.dart';
+import '../Screens/bottomBar/user_trip_history.dart';
 import '../Screens/home_screen.dart';
 
 class CustomScaffold extends StatelessWidget {
@@ -20,9 +22,8 @@ class CustomScaffold extends StatelessWidget {
   final List<Widget> pages = [
     HomePage(),
     LocationPage(),
-    // const MyTickets(),
+    UserTripHistoryPage(userId: FirebaseAuth.instance.currentUser!.uid),
     SettingScreen(),
-    // SearchScreen(),
   ];
 
   @override
@@ -34,7 +35,7 @@ class CustomScaffold extends StatelessWidget {
       body: body,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: index,
-        backgroundColor: Colors.brown[800],
+        backgroundColor: Color.fromARGB(255, 54, 36, 32),
         showUnselectedLabels: false,
         showSelectedLabels: false,
         selectedItemColor: Colors.white,
@@ -44,7 +45,9 @@ class CustomScaffold extends StatelessWidget {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: '',),
           BottomNavigationBarItem(icon: Icon(Icons.map_outlined), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: '')
+          BottomNavigationBarItem(icon: Icon(Icons.confirmation_num_outlined), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: ''),
+
         ],
         onTap: onTabTapped,
       ),

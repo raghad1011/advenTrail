@@ -36,7 +36,7 @@ class _SearchPageState extends State<SearchPage> {
         trailRoute: data['trailRoute'],
         difficulty: data['difficulty'],
         duration: data['duration'],
-        status: data['status'],
+        tripStatus: data['tripStatus'],
         imageUrl: data['imageUrl'],
         tripDate: data['tripDate'],
         accessibility: data['accessibility'],
@@ -74,7 +74,7 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+        padding: const EdgeInsets.only(top: 75, left: 20, right: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

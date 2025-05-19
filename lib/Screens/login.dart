@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print, deprecated_member_use
+
 import 'package:adver_trail/Screens/signup.dart';
 import 'package:adver_trail/component/main_layout.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,7 +9,6 @@ import 'package:get/get.dart';
 import '../admin/admin_home.dart';
 import '../component/custom_text_field.dart';
 import 'forgot_password.dart';
-
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -42,7 +43,8 @@ class LoginScreenState extends State<LoginScreen> {
                   color: Colors.black.withOpacity(0.5),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.27, left: 20),
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.27, left: 20),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -59,135 +61,161 @@ class LoginScreenState extends State<LoginScreen> {
                       ),
                       Align(
                         alignment: Alignment.bottomLeft,
-                        child: Text('Embark on Your Journey: Login to Explore',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                            )),
+                        child: Text(
+                          'Embark on Your Journey: Login to Explore',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
               ],
             ),
-            Positioned.fill(
-              top: 260,
-              child: Container(
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(25),
-                  ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 10),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Email',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                        ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: MediaQuery.removeViewInsets(
+                removeBottom: true,
+                context: context,
+                child: SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(25),
                       ),
                     ),
-                    CustomTextField(
-                      icon: Icons.email_outlined,
-                      hintText: 'ex: user@examle.com',
-                      controller: emailController,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 12),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Password',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    CustomTextField(
-                      icon: Icons.lock_outline,
-                      hintText: '******',
-                      obscureText: true,
-                      controller: passwordController,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "this field required";
-                        }
-                        return null;
-                      },
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () => Get.to(()=>NewpasswordScreen()),
-                        child: Text(
-                          'Forgot Password',
-                          style: TextStyle(
-                            color: Colors.black87,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 4,
+                          margin: const EdgeInsets.only(bottom: 16),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (formKey.currentState!.validate()) {
-                          await signIn(context, emailController.text.trim(),
-                              passwordController.text.trim());
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          minimumSize: Size(double.infinity, 50),
-                          backgroundColor: Colors.brown[800],
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          )),
-                      child: Text(
-                        'Login',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Don't have an account? ",
-                          style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-                        ),
-                        GestureDetector(
-                          onTap: () => Get.to(()=>SignupScreen()),
-                          child: const Text(
-                            "Sign up",
+                        SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Email',
                             style: TextStyle(
-                              fontSize: 12,
+                              color: Colors.black,
                               fontWeight: FontWeight.w500,
-                              color: Colors.brown,
+                              fontSize: 14,
                             ),
                           ),
                         ),
+                        CustomTextField(
+                          icon: Icons.email_outlined,
+                          hintText: 'ex: user@example.com',
+                          controller: emailController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter your email';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 12),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Password',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        CustomTextField(
+                          icon: Icons.lock_outline,
+                          hintText: '****',
+                          obscureText: true,
+                          controller: passwordController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "this field required";
+                            }
+                            return null;
+                          },
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () =>
+                                Get.to(() => NewpasswordScreen()),
+                            child: Text(
+                              'Forgot Password',
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            if (formKey.currentState!.validate()) {
+                              await signIn(
+                                context,
+                                emailController.text.trim(),
+                                passwordController.text.trim(),
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            minimumSize: Size(double.infinity, 50),
+                            backgroundColor: Colors.brown[800],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                          ),
+                          child: Text(
+                            'Login',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Don't have an account? ",
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.grey[500]),
+                            ),
+                            GestureDetector(
+                              onTap: () => Get.to(() => SignupScreen()),
+                              child: const Text(
+                                "Sign up",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.brown,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -197,48 +225,71 @@ class LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
 Future<void> signIn(
     BuildContext context, String email, String password) async {
   try {
-    // Sign in with email and password
     UserCredential userCredential = await FirebaseAuth.instance
         .signInWithEmailAndPassword(
         email: email.trim(), password: password.trim());
 
-    // Fetch user data from Firestore
+    // ❗تعليق التحقق من التفعيل لا يزال هنا — فعّل عند الحاجة
+    // if (!userCredential.user!.emailVerified) {
+    //   await FirebaseAuth.instance.signOut();
+    //   showDialog(
+    //     context: context,
+    //     builder: (_) => AlertDialog(
+    //       title: Text("Email Not Verified"),
+    //       content: Text("Please verify your email address before logging in."),
+    //       actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text("OK"))],
+    //     ),
+    //   );
+    //   return;
+    // }
+
     DocumentSnapshot userDoc = await FirebaseFirestore.instance
         .collection('users')
-        .doc(userCredential.user?.uid) // Safely access UID
+        .doc(userCredential.user?.uid)
         .get();
 
     if (userDoc.exists) {
-      // Check for the 'role' field in Firestore and cast it to String
       String? role = userDoc['role'] as String?;
 
       if (role == null) {
-        // Handle case if role is missing
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Role is missing in the user data")),
         );
         return;
       }
 
-      // Navigate based on the role
       if (role == 'admin') {
-        Get.offAll(AdminHomeScreen());
+        Get.offAll(() => AdminHomeScreen());
       } else {
-        Get.offAll(MainLayout());
+        Get.offAll(() => MainLayout());
       }
     } else {
-      // Handle case where user document is not found
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("User data not found")),
       );
     }
-  } catch (e) {
-    // Handle authentication errors
+  } on FirebaseAuthException catch (e) {
+    print('FirebaseAuthException code: ${e.code}');
+    String errorMessage;
+
+    if (e.code == 'user-not-found') {
+      errorMessage = 'No user found for that email.';
+    } else if (e.code == 'wrong-password') {
+      errorMessage = 'Incorrect password.';
+    } else {
+      errorMessage = 'Authentication error: ${e.message}';
+    }
+
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Error: ${e.toString()}")),
+      SnackBar(content: Text(errorMessage)),
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Unexpected error: ${e.toString()}")),
     );
   }
 }

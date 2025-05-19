@@ -14,8 +14,10 @@ class TripsModel {
   final String duration;
   final String imageUrl;
   final Timestamp? tripDate;
-  final String? status;
+  final String? tripStatus;
   final int? maxGuests;
+  double averageRating = 0.0;
+  int ratingCount = 0;
 
 
   TripsModel({
@@ -31,25 +33,10 @@ class TripsModel {
     required this.distance,
     required this.duration,
     required this.imageUrl,
-     this.tripDate,
-    this.status,
-     this.maxGuests,
+    this.tripDate,
+    this.tripStatus,
+    this.maxGuests,
   });
-
-  // Constructor for initializing default values
-  // factory TripsModel.init() => TripsModel(
-  //       id: "",
-  //       name: '',
-  //       price: 0.0,
-  //       location: '',
-  //       trailRoute: GeoPoint(0, 0),
-  //       // imageUrl: "",
-  //       isDeleted: false,
-  //       status: '',
-  //       description: '',
-  //       difficulty: '',
-  //       duration: '',
-  //     );
 
   // Convert from JSON
   factory TripsModel.fromJson(Map<String, dynamic> json) => TripsModel(
@@ -66,7 +53,7 @@ class TripsModel {
         duration: json['duration'],
         imageUrl: json['imageUrl'],
         tripDate: json['tripDate'],
-        status: json['status'],
+        tripStatus: json['tripStatus'],
         maxGuests: json['maxGuests'] ?? 5 ,
       );
 
@@ -85,7 +72,7 @@ class TripsModel {
     data['duration'] = duration;
     data['imageUrl'] = imageUrl;
     data['tripDate'] = tripDate;
-    data['status'] = status;
+    data['tripStatus'] = tripStatus;
     data['maxGuests'] = maxGuests;
     return data;
   }

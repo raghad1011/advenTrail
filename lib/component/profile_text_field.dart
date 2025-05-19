@@ -19,16 +19,18 @@ class ProfileTextField extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            labelText,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          SizedBox(
+            width: 90,
+            child: Text(
+              labelText,
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
           ),
-          SizedBox(width: 10),
           Expanded(
             child: TextFormField(
               controller: controller,
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                 filled: true,
                 fillColor: Color(0xffD1C4B9),
                 hintText: hintText,

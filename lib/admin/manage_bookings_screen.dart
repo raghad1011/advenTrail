@@ -108,9 +108,9 @@ class _ManageBookingsScreenState extends State<ManageBookingsScreen> {
                               Text(
                                 "Status: ${booking.status ?? 'N/A'}",
                                 style: TextStyle(
-                                  color: booking.status == 'Confirmed'
+                                  color: booking.status == 'booked'
                                       ? Colors.green
-                                      : booking.status == 'Cancelled'
+                                      : booking.status == 'cancelled'
                                       ? Colors.red
                                       : Colors.orange,
                                   fontWeight: FontWeight.bold,

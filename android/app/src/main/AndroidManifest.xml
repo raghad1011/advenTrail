@@ -1,4 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.advertrail.adver_trail">
+
 
 
 <!-- Permissions -->
@@ -43,8 +45,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2"/>
-            <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyDMU-qLECFACBzboYADUOUHrEYH4gyJmVQ"/>
+            <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyAQy07hRIYG06_26UhNm9hKj7nPd3TL18s"/>
     </application>
 
     <queries>

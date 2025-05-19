@@ -1,10 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:adver_trail/Screens/rating.dart';
-import 'package:adver_trail/component/date.dart';
 import 'package:adver_trail/component/main_layout.dart';
 import 'package:adver_trail/component/make_lines.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -33,9 +30,6 @@ class TripDetailsPageState extends State<TripDetailsPage> {
   int currentPage = 0;
   late String dateFormatted;
 
-  double averageRating = 0.0;
-  int ratingCount = 0;
-
   @override
   void initState() {
     super.initState();
@@ -44,7 +38,6 @@ class TripDetailsPageState extends State<TripDetailsPage> {
         : "Not set";
     fetchWeather(
         widget.trip.trailRoute.latitude, widget.trip.trailRoute.longitude);
-    getRatingData();
   }
 
   Future<void> fetchWeather(double latitude, double longitude) async {
@@ -57,14 +50,14 @@ class TripDetailsPageState extends State<TripDetailsPage> {
         final data = json.decode(response.body);
         setState(() {
           temperature =
-          "${data['data']['timelines'][0]['intervals'][0]['values']['temperature']}";
+              "${data['data']['timelines'][0]['intervals'][0]['values']['temperature']}";
           windSpeed =
-          "${data['data']['timelines'][0]['intervals'][0]['values']['windSpeed']} km/h";
+              "${data['data']['timelines'][0]['intervals'][0]['values']['windSpeed']} km/h";
           int weatherCode = data['data']['timelines'][0]['intervals'][0]
-          ['values']['weatherCode'];
+              ['values']['weatherCode'];
           condition = getWeatherDescription(weatherCode);
           precipitationProbability =
-          "${data['data']['timelines'][0]['intervals'][0]['values']['precipitationProbability']}%";
+              "${data['data']['timelines'][0]['intervals'][0]['values']['precipitationProbability']}%";
           isLoading = false;
         });
       } else {
@@ -78,30 +71,7 @@ class TripDetailsPageState extends State<TripDetailsPage> {
     }
   }
 
-  Future<void> getRatingData() async {
-    final tripDoc = await FirebaseFirestore.instance
-        .collection('trips')
-        .doc(widget.trip.id)
-        .get();
 
-    if (tripDoc.exists) {
-      final data = tripDoc.data();
-      setState(() {
-        averageRating = (data?['averageRating'] ?? 0).toDouble();
-        ratingCount = (data?['ratingCount'] ?? 0).toInt();
-      });
-    }
-  }
-
-  void openRatingDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => RatingDialog(
-        tripId: widget.trip.id,
-        bookingId: 'dummy_booking_id',
-      ),
-    ).then((_) => getRatingData()); // بعد التقييم نعيد جلب البيانات
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,18 +99,18 @@ class TripDetailsPageState extends State<TripDetailsPage> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                   decoration: BoxDecoration(
                     color: widget.trip.category == 'Hiking'
                         ? Colors.red.withOpacity(0.1)
                         : widget.trip.category == 'Cycling'
-                        ? Colors.orange
-                        : widget.trip.category == 'Mountain'
-                        ? Colors.brown.withOpacity(0.1)
-                        : widget.trip.category == 'Water Activities'
-                        ? Colors.blue.withOpacity(0.1)
-                        : Colors.yellow.withOpacity(0.1),
+                            ? Colors.orange
+                            : widget.trip.category == 'Mountain'
+                                ? Colors.brown.withOpacity(0.1)
+                                : widget.trip.category == 'Water Activities'
+                                    ? Colors.blue.withOpacity(0.1)
+                                    : Colors.yellow.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
@@ -149,14 +119,12 @@ class TripDetailsPageState extends State<TripDetailsPage> {
                       color: widget.trip.category == 'Hiking'
                           ? Colors.red
                           : widget.trip.category == 'Cycling'
-                          ? Colors.orange
-                          : widget.trip.category ==
-                          'Mountain'
-                          ? Colors.brown
-                          : widget.trip.category ==
-                          'Water Activities'
-                          ? Colors.blue
-                          : Color(0xFFF9A825),
+                              ? Colors.orange
+                              : widget.trip.category == 'Mountain'
+                                  ? Colors.brown
+                                  : widget.trip.category == 'Water Activities'
+                                      ? Colors.blue
+                                      : Color(0xFFF9A825),
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
                     ),
@@ -176,14 +144,14 @@ class TripDetailsPageState extends State<TripDetailsPage> {
                   ],
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                   decoration: BoxDecoration(
                     color: widget.trip.difficulty == 'Easy'
                         ? Colors.green.withOpacity(0.1)
                         : widget.trip.difficulty == 'Medium'
-                        ? Colors.orange.withOpacity(0.1)
-                        : Colors.red.withOpacity(0.1),
+                            ? Colors.orange.withOpacity(0.1)
+                            : Colors.red.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
@@ -192,8 +160,8 @@ class TripDetailsPageState extends State<TripDetailsPage> {
                       color: widget.trip.difficulty == 'Easy'
                           ? Colors.green
                           : widget.trip.difficulty == 'Moderate'
-                          ? Colors.orange
-                          : Colors.red,
+                              ? Colors.orange
+                              : Colors.red,
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
                     ),
@@ -203,51 +171,33 @@ class TripDetailsPageState extends State<TripDetailsPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 12.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: openRatingDialog,
-                        child: Row(
-                          children: List.generate(5, (index) {
-                            return Icon(
-                              Icons.star,
-                              size: 24,
-                              color: index < averageRating.round()
-                                  ? Colors.amber
-                                  : Colors.grey,
-                            );
-                          }),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        "($ratingCount)", // عدد التقييمات
-                        style: const TextStyle(fontSize: 14),
-                      ),
-
-                    ],
+                  Text(
+                    'Trip Day:',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  Text("${widget.trip.price} JD",
-                      style:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 5),
+                  Text(DateFormat('EEEE, MMMM d, yyyy – hh:mm a')
+                      .format(widget.trip.tripDate!.toDate())),
                 ],
               ),
             ),
             Divider(),
             Text(
               'About',
-              style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ReadMoreText(text: widget.trip.description.toString(),),
+              child: ReadMoreText(
+                text: widget.trip.description.toString(),
+              ),
             ),
             SizedBox(height: 15),
             Container(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.symmetric(vertical: 10,horizontal: 8),
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(20),
@@ -258,32 +208,32 @@ class TripDetailsPageState extends State<TripDetailsPage> {
                   Column(children: [
                     Row(
                       children: [
-                        Icon(Icons.access_time, color: Colors.brown[800]),
-                        Text("${widget.trip.duration} Hours"),
+                        Icon(Icons.access_time, color: Colors.brown[800],size: 18),
+                        Text("${widget.trip.duration} Hours",style: TextStyle(fontSize: 12)),
                       ],
                     ),
                     Text('Duration', style: TextStyle(color: Colors.black54))
                   ]),
                   Column(children: [
-                    Row(
+                    Wrap(
                       children: [
                         Icon(Icons.accessibility_new_outlined,
-                            color: Colors.brown[800]),
-                        Text("${widget.trip.accessibility}"),
+                            color: Colors.brown[800],size: 18,),
+                        Text("${widget.trip.accessibility}",style: TextStyle(fontSize: 10)),
                       ],
                     ),
-                    Text('accessibility', style: TextStyle(color: Colors.black54))
+                    Text('accessibility',
+                        style: TextStyle(color: Colors.black54))
                   ]),
                   Column(children: [
                     Row(
                       children: [
                         Icon(Icons.location_on_outlined,
-                            color: Colors.brown[800]),
-                        Text(widget.trip.distance),
+                            color: Colors.brown[800],size: 18),
+                        Text(widget.trip.distance,style: TextStyle(fontSize: 12)),
                       ],
                     ),
-                    Text("Distance",
-                        style: TextStyle(color: Colors.black54))
+                    Text("Distance", style: TextStyle(color: Colors.black54))
                   ]),
                 ],
               ),
@@ -293,7 +243,7 @@ class TripDetailsPageState extends State<TripDetailsPage> {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: ()async {
+                    onTap: () async {
                       await launchUrl(Uri.parse(
                           'google.navigation:q=${widget.trip.trailRoute.latitude},${widget.trip.trailRoute.longitude}'));
                     },
@@ -306,9 +256,7 @@ class TripDetailsPageState extends State<TripDetailsPage> {
             Text(
               "What's Included",
               style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  height: 1.5),
+                  fontWeight: FontWeight.bold, fontSize: 18, height: 1.5),
             ),
             SizedBox(height: 15),
             Row(
@@ -324,13 +272,15 @@ class TripDetailsPageState extends State<TripDetailsPage> {
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      child: Icon(Icons.emoji_transportation,
-                          size: 35,color: Colors.brown[800],),
+                      child: Icon(
+                        Icons.emoji_transportation,
+                        size: 35,
+                        color: Colors.brown[800],
+                      ),
                     ),
                     Text(
                       'Transportation',
-                      style: const TextStyle(
-                          fontSize: 10, color: Colors.black),
+                      style: const TextStyle(fontSize: 10, color: Colors.black),
                     ),
                   ],
                 ),
@@ -343,168 +293,164 @@ class TripDetailsPageState extends State<TripDetailsPage> {
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      child: Icon(Icons.food_bank_outlined,
-                          size: 35,color: Colors.brown[800],),
+                      child: Icon(
+                        Icons.food_bank_outlined,
+                        size: 35,
+                        color: Colors.brown[800],
+                      ),
                     ),
                     Text(
                       'Meals',
-                      style: const TextStyle(
-                          fontSize: 10, color: Colors.black),
+                      style: const TextStyle(fontSize: 10, color: Colors.black),
                     ),
                   ],
                 ),
                 Column(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Icon(Icons.attach_money_outlined,
-                          size: 35,color: Colors.brown[800],)
-                    ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Icon(
+                          Icons.attach_money_outlined,
+                          size: 35,
+                          color: Colors.brown[800],
+                        )),
                     Text(
                       'Entry Fees',
-                      style: const TextStyle(
-                          fontSize: 10, color: Colors.black),
+                      style: const TextStyle(fontSize: 10, color: Colors.black),
                     ),
                   ],
                 ),
                 Column(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Icon(Icons.tour_outlined,
-                          size: 35,color: Colors.brown[800],)
-                    ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Icon(
+                          Icons.tour_outlined,
+                          size: 35,
+                          color: Colors.brown[800],
+                        )),
                     Text(
                       'Guided Tour',
-                      style: const TextStyle(
-                          fontSize: 10, color: Colors.black),
+                      style: const TextStyle(fontSize: 10, color: Colors.black),
                     ),
                   ],
                 )
               ],
             ),
             Divider(
-              color: Colors.grey, // لون الخط
-              thickness: 2, // سمك الخط
-              height: 20, // المسافة بين الخط والعناصر الأخرى
-            ),
-            SizedBox(height: 5),
-            Text(
-              'Trip Day:',
-              style:
-              TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 5),
-            WeekDaysSelector(
-              selectedDay:
-              widget.trip.tripDate.toString(), // حدد اليوم المطلوب
+              color: Colors.grey,
+              thickness: 2,
+              height: 20,
             ),
             SizedBox(height: 20),
             // فقرة الطقس
             isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // Text(
-                //   " ${widget.city.isNotEmpty ? widget.city : 'Unknown Location'}",
-                //   style: const TextStyle(
-                //       fontSize: 18,
-                //       fontWeight: FontWeight.bold,
-                //       color: Colors.brown),
-                // ),
-                const SizedBox(height: 8),
-                Column(
-                  //mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      temperature,
-                      style: const TextStyle(fontSize: 28),
-                    ),
-                    Row(
-                      children: [
-                        Image.asset(
-                          getWeatherIconPath(weatherCode),
-                          width: 40,
-                          height: 40,
-                        ),
-                        // SizedBox(width: 8),
-                        Text(
-                          condition, // النص من getWeatherDescription
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                const SizedBox(width: 100),
-
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.air,
-                            size: 15.0), // أيقونة الرياح
-                        Text(
-                          windSpeed,
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 8.0),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.water_drop, // أيقونة قطرة الماء
-                          color: Colors.blue,
-                          size: 17,
-                        ),
-                        Text(
-                          precipitationProbability,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.blue,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            temperature,
+                            style: const TextStyle(fontSize: 28),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-
+                          Row(
+                            children: [
+                              Image.asset(
+                                getWeatherIconPath(weatherCode),
+                                width: 40,
+                                height: 40,
+                              ),
+                              // SizedBox(width: 8),
+                              Text(
+                                condition,
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      const SizedBox(width: 100),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.air, size: 15.0),
+                              Text(
+                                windSpeed,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8.0),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.water_drop,
+                                color: Colors.blue,
+                                size: 17,
+                              ),
+                              Text(
+                                precipitationProbability,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            GestureDetector(
-              onTap: () => Get.off(MainLayout()),
-              child: Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.brown, width: 2),
-                ),
-                child: Center(child: Icon(Icons.arrow_back, size: 24, color: Colors.brown),)
-              ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              offset: Offset(0, -4),
+              blurRadius: 8,
+              spreadRadius: 1,
             ),
-            ElevatedButton(
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () => Get.off(MainLayout()),
+                child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.brown, width: 2),
+                    ),
+                    child: Center(
+                      child:
+                          Icon(Icons.arrow_back, size: 24, color: Colors.brown),
+                    )),
+              ),
+              Text(widget.trip.price.toString()),
+              ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(260, 50),
                   backgroundColor: Colors.brown[800],
@@ -517,17 +463,23 @@ class TripDetailsPageState extends State<TripDetailsPage> {
                       context: context,
                       isScrollControlled: true,
                       shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(24)),
                       ),
-                      builder: (context) => BookingBottomSheet(trip: widget.trip,));
+                      builder: (context) => BookingBottomSheet(
+                            trip: widget.trip,
+                          ));
                 },
                 child: const Text(
                   "Book Now",
                   style: TextStyle(
-                      color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
-          ],
+            ],
+          ),
         ),
       ),
     );

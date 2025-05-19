@@ -1,80 +1,91 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class RatingDialog extends StatefulWidget {
+class RatingBottomSheet extends StatefulWidget {
   final String tripId;
-  final String bookingId;
+  final String userId;
 
-  const RatingDialog({
+  const RatingBottomSheet({
     super.key,
     required this.tripId,
-    required this.bookingId,
+    required this.userId
   });
 
   @override
-  State<RatingDialog> createState() => _RatingDialogState();
+  State<RatingBottomSheet> createState() => _RatingBottomSheetState();
 }
 
-class _RatingDialogState extends State<RatingDialog> {
+class _RatingBottomSheetState extends State<RatingBottomSheet> {
   double rating = 0;
+  String? comment;
 
   Future<void> submitRating() async {
-    if (rating > 0) {
-      if (widget.tripId.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Trip ID is missing')),
-        );
-        return;
-      }
+    if (rating == 0) return;
 
-      final tripRef =
-      FirebaseFirestore.instance.collection('trips').doc(widget.tripId);
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
 
-      await FirebaseFirestore.instance.runTransaction((transaction) async {
-        final snapshot = await transaction.get(tripRef);
+    final ratingData = {
+      'tripId': widget.tripId,
+      'userId': widget.userId,
+      'rating': rating,
+      'comment': comment ?? '',
+      'date': Timestamp.now(),
+    };
 
-        double currentAverage = snapshot.data()?['averageRating']?.toDouble() ?? 0.0;
-        int currentCount = snapshot.data()?['ratingCount']?.toInt() ?? 0;
+    final tripRef = FirebaseFirestore.instance.collection('trips').doc(widget.tripId);
+    final ratingRef = FirebaseFirestore.instance.collection('ratings');
 
-        double newAverage = ((currentAverage * currentCount) + rating) / (currentCount + 1);
-        int newCount = currentCount + 1;
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      final snapshot = await transaction.get(tripRef);
+      double currentAverage = snapshot.data()?['averageRating']?.toDouble() ?? 0.0;
+      int currentCount = snapshot.data()?['ratingCount']?.toInt() ?? 0;
 
-        transaction.update(tripRef, {
-          'averageRating': newAverage,
-          'ratingCount': newCount,
-        });
+      double newAverage = ((currentAverage * currentCount) + rating) / (currentCount + 1);
+      int newCount = currentCount + 1;
+
+      transaction.update(tripRef, {
+        'averageRating': newAverage,
+        'ratingCount': newCount,
       });
 
-      Navigator.of(context).pop(); // Close dialog
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Thanks for your rating!')),
-      );
-    }
+      ratingRef.add(ratingData);
+    });
+
+    Navigator.pop(context, true);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Thank you for your feedback!')),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Rate your experience'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
+    return Container(
+      padding: const EdgeInsets.all(16),
+      height: 300,
+      child: Column(
         children: [
+          const Text(
+            'Rate your experience',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20),
           RatingBar.builder(
             initialRating: 0,
             minRating: 1,
-            direction: Axis.horizontal,
             allowHalfRating: true,
             itemCount: 5,
-            itemBuilder: (context, _) => const Icon(
-              Icons.star,
-              color: Colors.amber,
-            ),
+            itemBuilder: (context, _) => const Icon(Icons.star, color: Colors.amber),
             onRatingUpdate: (newRating) {
-              setState(() {
-                rating = newRating;
-              });
+              setState(() => rating = newRating);
             },
+          ),
+          const SizedBox(height: 10),
+          TextField(
+            onChanged: (val) => comment = val,
+            decoration: const InputDecoration(hintText: 'Leave a comment (optional)'),
           ),
           const SizedBox(height: 20),
           ElevatedButton(

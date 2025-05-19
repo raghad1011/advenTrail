@@ -1,0 +1,2 @@
+C:/Users/DASH ARABIA/Documents/GitHub/advenTrail/android/app/.cxx/Debug/84h4273e/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/DASH ARABIA/Documents/GitHub/advenTrail/android/app/.cxx/Debug/84h4273e/armeabi-v7a/CMakeFiles/rebuild_cache.dir

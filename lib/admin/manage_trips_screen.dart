@@ -1,10 +1,14 @@
+import 'dart:developer';
+
 import 'package:adver_trail/model/trips.dart';
 import 'package:adver_trail/network/firebase_services.dart';
 import "package:cloud_firestore/cloud_firestore.dart";
+import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 
+import '../Screens/appBar/notification.dart';
 import 'add_edit_trip.dart';
 
 class ManageTripsScreen extends StatefulWidget {
@@ -95,7 +99,7 @@ class TripList extends StatelessWidget {
               _infoRow('Duration', tripData['duration']),
               _infoRow('maxGuests', tripData['maxGuests'].toString()),
               _infoRow('Trip Date', _formatTimestamp(tripData['tripDate'])),
-              _infoRow('Status', tripData['status'] ?? 'N/A'),
+              _infoRow('tripStatus', tripData['tripStatus'] ?? 'N/A'),
               SizedBox(height: 10),
               Text('Description:',
                   style: TextStyle(fontWeight: FontWeight.bold)),
@@ -194,6 +198,14 @@ class TripList extends StatelessWidget {
                       icon: Icons.delete,
                       label: 'Delete',
                     ),
+                    SlidableAction(
+                      onPressed: (_) => _showCancelConfirmationDialog(context, trip),
+                      backgroundColor: Colors.orange,
+                      foregroundColor: Colors.white,
+                      icon: Icons.cancel,
+                      label: 'Cancel',
+                    ),
+
                   ],
                 ),
                 child: Card(
@@ -213,6 +225,133 @@ class TripList extends StatelessWidget {
               ),
             );
           },
+        );
+      },
+    );
+  }
+
+  Future<void> _showCancelConfirmationDialog(BuildContext context, TripsModel trip) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Cancellation'),
+          content: const Text('Are you sure you want to cancel this trip?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('No'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: const Text('Yes, Cancel'),
+              onPressed: () async {
+                try {
+                  // Check authentication
+                  final currentUser = FirebaseAuth.instance.currentUser;
+                  if (currentUser == null) {
+                    throw Exception('No authenticated user. Please log in.');
+                  }
+                  log('Authenticated user: ${currentUser.uid}');
+
+                  // Update trip status to canceled
+                  log('Updating trip ${trip.id} to canceled status');
+                  await FirebaseFirestore.instance
+                      .collection('trips')
+                      .doc(trip.id)
+                      .update({'tripStatus': 'canceled'});
+
+                  // Verify trip update
+                  final tripDoc = await FirebaseFirestore.instance
+                      .collection('trips')
+                      .doc(trip.id)
+                      .get();
+                  if (tripDoc.data()?['tripStatus'] != 'canceled') {
+                    throw Exception('Failed to update trip status');
+                  }
+                  log('Trip ${trip.id} status updated to canceled');
+
+                  // Fetch bookings for the trip
+                  final bookingsSnapshot = await firebaseService.getBookingsForTrip(trip.id);
+                  log('Found ${bookingsSnapshot.docs.length} bookings for trip ${trip.id}');
+
+                  if (bookingsSnapshot.docs.isEmpty) {
+                    log('No bookings found for trip ${trip.id}. No notifications will be sent.');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('No bookings found for trip ${trip.name}.')),
+                    );
+                  }
+
+                  // Send notification to each booked user
+                  int successCount = 0;
+                  for (var doc in bookingsSnapshot.docs) {
+                    final booking = doc.data() as Map<String, dynamic>;
+                    log('Booking data: $booking');
+
+                    // Safely extract userId
+                    if (!booking.containsKey('userId')) {
+                      log('Booking ${doc.id} missing userId field');
+                      continue;
+                    }
+
+                    final userIdField = booking['userId'];
+                    String? userId;
+
+                    if (userIdField is DocumentReference) {
+                      userId = userIdField.id;
+                    } else if (userIdField is String) {
+                      userId = userIdField;
+                    } else {
+                      log('Invalid userId type in booking ${doc.id}: ${userIdField.runtimeType}');
+                      continue;
+                    }
+
+                    log('Sending notification to user: $userId for trip: ${trip.name}');
+
+                    final success = await NotificationScreen.sendNotificationToUser(
+                      userId: userId,
+                      title: 'Trip Canceled',
+                      message: 'The trip "${trip.name}" has been canceled due to weather.',
+                      tripId: trip.id,
+                      type: 'cancellation',
+                    );
+
+                    if (success) {
+                      successCount++;
+                      log('Notification sent successfully to user: $userId');
+                    } else {
+                      log('Failed to send notification to user: $userId');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Failed to notify user: $userId')),
+                      );
+                    }
+                  }
+
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        bookingsSnapshot.docs.isEmpty
+                            ? 'Trip canceled, but no bookings found.'
+                            : 'Trip canceled and $successCount user(s) notified!',
+                      ),
+                    ),
+                  );
+
+                  if (context.findAncestorStateOfType<_ManageTripsScreenState>() != null) {
+                    context
+                        .findAncestorStateOfType<_ManageTripsScreenState>()!
+                        .setState(() {});
+                  }
+                } catch (e, stackTrace) {
+                  log('Error canceling trip or sending notifications: $e', error: e, stackTrace: stackTrace);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error canceling trip: $e')),
+                  );
+                }
+              },
+            ),
+          ],
         );
       },
     );

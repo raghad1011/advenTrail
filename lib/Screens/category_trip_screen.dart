@@ -1,7 +1,6 @@
 import 'package:adver_trail/Screens/pageview.dart' as Get;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import '../component/trip_card.dart';
 import '../model/trips.dart';
 import '../network/firebase_services.dart';
@@ -9,7 +8,9 @@ import '../network/firebase_services.dart';
 class CategoryTripsScreen extends StatefulWidget {
   final String categoryName;
 
-  const CategoryTripsScreen({super.key, required this.categoryName});
+  const CategoryTripsScreen({
+    super.key,
+    required this.categoryName,});
 
   @override
   State<CategoryTripsScreen> createState() => _CategoryTripsScreenState();
@@ -44,7 +45,7 @@ class _CategoryTripsScreenState extends State<CategoryTripsScreen> {
             Text(widget.categoryName,
                 style: TextStyle(
                   fontSize: 14,
-                  color: Color(0xFF4E72E3),
+                  color: Color(0xff361C0B),
                   fontWeight: FontWeight.bold,
                 )),
           ],
@@ -118,38 +119,47 @@ class _CategoryTripsScreenState extends State<CategoryTripsScreen> {
                       ),
                     ),
                   ),
-                  if (searchController.text.isNotEmpty) ...[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20.0),
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Search Result of  ',
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 16),
-                            ),
-                            TextSpan(
-                              text: '" ${searchController.text} "',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                        children: [
+                          if (searchController.text.isNotEmpty) ...[
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 20.0),
+                              child: RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'Search Result of  ',
+                                      style:
+                                      TextStyle(color: Colors.grey, fontSize: 16),
+                                    ),
+                                    TextSpan(
+                                      text: '" ${searchController.text} "',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
-                        ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: filteredTrips.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 12.0),
+                                  child: TripCard(trip: filteredTrips[index],),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: filteredTrips.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 12.0),
-                          child: TripCard(trip: filteredTrips[index]),
-                        );
-                      },
                     ),
                   ),
                 ],
