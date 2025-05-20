@@ -1,5 +1,10 @@
+import 'package:adver_trail/Screens/about.dart';
+import 'package:adver_trail/Screens/help.dart';
+import 'package:adver_trail/Screens/privecy_policy.dart';
 import 'package:adver_trail/component/build_menu_item.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingScreen extends StatelessWidget {
@@ -28,17 +33,23 @@ class SettingScreen extends StatelessWidget {
             buildMenuItem(
               icon: Icons.question_mark,
               title: 'Help',
-              onTap: () {},
+              onTap: ()async {
+await Get.to(Help());
+              },
             ),
             buildMenuItem(
               icon: Icons.announcement_outlined,
               title: 'About',
-              onTap: () {},
+              onTap: ()async {
+               await Get.to(About());
+              },
             ),
             buildMenuItem(
               icon: Icons.lock_outline,
               title: 'Privacy Policy',
-              onTap: () {},
+              onTap: () {
+                Get.to(PrivacyPolicyPage());
+              },
             ),
             buildMenuItem(
               icon: Icons.format_quote_outlined,
